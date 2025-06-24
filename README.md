@@ -1,51 +1,65 @@
-# BB5
+# BB5 — Blazor Components for Bootstrap 5
 
-BB5 is a set of Blazor components for Bootstrap 5.
+**BB5** is a powerful set of Blazor components built on top of **Bootstrap 5**,
+designed to help you build fast, clean, and modern UIs with minimal effort.
 
-It is different from another of the Blazor Bootstrap component libraries
-in that it is not just a mapper around Bootstrap components. It focuses
-on data flow rather than markup and glues together the Bootstrap components
-and Blazor in a way that adds value to the developer.
+Whether you're crafting individual controls or assembling full-featured
+data-driven screens, BB5 gives you the tools you need—out of the box.
 
-Example:
+## 🚀 Why BB5?
 
-```razor
-<div class="mb-3">
-    <Label Content="Title"
-           For="@TitleId"/>
-    <Input Id="@TitleId"
-           Value="@TitleText"
-           ValidationState="@TitleValidationState"
-           ValueChanged="value => TitleEdited = value" />
-    <Feedback Content="@TitleFeedback"
-              ValidationState="@TitleValidationState" />
-</div>
-```
+Building Blazor apps should be quick, consistent, and scalable. BB5 solves
+the problem of slow and repetitive UI development by providing:
 
-depending on the state of the component, will render as
+* **Multiple levels of abstraction**: From low-level UI building blocks to
+  high-level smart components.
+* **Out-of-the-box UX patterns**: Data grids, record forms, action buttons,
+  and layouts that just work.
+* **Minimal boilerplate**: Plug in your model, hook up a data source, and
+  you're done.
 
-```html
-<div class="mb-3">
-  <label for="title" class="form-label">Title</label>
-  <input id="title" class="form-control" value="">
-</div>
-```
+## 🧩 What’s Inside?
 
-or
+### ✅ Core Components
 
-```html
-<div class="mb-3">
-  <label for="title" class="form-label">Title</label>
-  <input id="title" class="form-control is-invalid" value="">
-  <div class="invalid-feedback">Title is required</div>
-</div>
-```
+Essential Blazor elements styled with Bootstrap 5: buttons, inputs, layout
+grids, modals, tabs, and more. Fully customisable and composable.
 
-In this project, as in all the others I maintain, I strive to follow
-the highest quality standards — including meticulous code reviews,
-unit tests, integration tests, and thorough documentation.
+### 📄 Record Forms
 
-This level of quality comes at a cost. If you find this project useful,
-please consider sponsoring it. Sponsorship is the best way to support
-the project, ensure its continued development, and receive updates and
-new features.
+Generate entire forms from a model definition. Supports validation, layout
+presets, custom field components, and save/cancel logic with hooks.
+
+### 📊 DataGrids
+
+Dynamic, responsive tables with built-in pagination, sorting, inline actions,
+and optional editing modes. Just bind a list—BB5 handles the rest.
+
+### ⚙️ Action Framework
+
+Wire up buttons and interactions to your business logic with zero ceremony.
+Define actions declaratively or with minimal C# code.
+
+## 🛠️ Designed for Developers
+
+BB5 gives you the control you want *when you need it*, and hides
+the complexity when you don't. Ideal for internal tools, admin panels,
+dashboards, and any Blazor project where delivery speed matters.
+
+## 📚 Docs & Demos
+
+Coming soon. For now, check out the samples folder and get started fast.
+
+## 🧪 Still Evolving
+
+BB5 is under active development. Contributions, feedback, and ideas are welcome.
+
+## 📄 Licensing
+
+BB5 is a commercial product with the following licensing terms:
+
+* **Free** for project contributors.
+* **\$99/year** per individual developer.
+* **\$999/year** for company-wide use.
+
+For licensing or contributor access, contact: **[bb5@tabbybooks.co.uk](mailto:bb5@tabbybooks.co.uk)]**.
