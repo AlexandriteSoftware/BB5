@@ -1,0 +1,38 @@
+﻿@using BB5.Services
+
+@namespace BB5.Components
+
+@inject IMarkdownRenderer MarkdownRenderer
+
+@if (!string.IsNullOrEmpty(Content)
+     || ChildContent is not null)
+{
+    <div @attributes="@Attributes">
+        @if (!string.IsNullOrEmpty(Content))
+        {
+            switch (ContentType)
+            {
+                case ContentType.Html:
+                    @((MarkupString)Content)
+                    break;
+                case ContentType.Markdown:
+                    @(MarkdownRenderer.ToHtml(Content))
+                    break;
+                case ContentType.Text:
+                default:
+                    @Content
+                    break;
+            }
+        }
+        
+        @ChildContent
+
+        @if (Dismissible)
+        {
+            <button type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    @onclick="DismissAsync"></button>
+        }
+    </div>
+}

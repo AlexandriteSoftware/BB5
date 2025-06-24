@@ -1,0 +1,30 @@
+﻿@using BB5.Services
+
+@namespace BB5.Components
+
+@inject IMarkdownRenderer MarkdownRenderer
+
+<button class="@Classes"
+        @onclick:preventDefault
+        @onclick="HandleClickAsync"
+        @attributes="@Attributes">
+    @if (!string.IsNullOrEmpty(Content))
+    {
+        switch (ContentType)
+        {
+            case ContentType.Html:
+                @((MarkupString)Content)
+                break;
+            case ContentType.Markdown:
+                @(MarkdownRenderer.ToHtml(Content))
+                break;
+            case ContentType.Text:
+            default:
+                @Content
+                break;
+                    
+        }
+    }
+        
+    @ChildContent
+</button>
