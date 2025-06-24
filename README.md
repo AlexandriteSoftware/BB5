@@ -62,4 +62,4 @@ BB5 is a commercial product with the following licensing terms:
 * **\$99/year** per individual developer.
 * **\$999/year** for company-wide use.
 
-For licensing or contributor access, contact: **[bb5@tabbybooks.co.uk](mailto:bb5@tabbybooks.co.uk)]**.
+For licensing or contributor access, contact: **[bb5@tabbybooks.co.uk](mailto:bb5@tabbybooks.co.uk)**.
