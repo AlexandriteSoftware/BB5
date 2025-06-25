@@ -21,8 +21,10 @@ public partial class Textarea
     [Parameter]
     public int? Rows { get; set; }
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Attributes { get; set; }
+
     private string Classes { get; set; } = "";
-    private Dictionary<string, object> Attributes { get; } = [];
 
     protected override void OnParametersSet()
     {

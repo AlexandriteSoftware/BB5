@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<form @onsubmit="HandleSubmit">
+    @foreach (var property in Item?.GetType().GetProperties()
+                              ?? Enumerable.Empty<System.Reflection.PropertyInfo>())
+    {
+        if (typeof(string) == property.PropertyType)
+        {
+            var id = property.Name;
+
+            var label = property.Name;
+            var valueText = property.GetValue(Item)?.ToString() ?? "";
+            var readOnly = !property.CanWrite;
+
+            <div class="mb-3">
+                <Label Content="@label" />
+                @if (readOnly)
+                {
+                    <Textarea Value="@valueText"
+                              readonly />
+                }
+                else
+                {
+                    <Textarea Value="@valueText"
+                              ValidationState="@GetValidationState(id)"
+                              ValueChanged="@(value => property.SetValue(Item, value))"/>
+
+                    <Feedback Content="@GetValidationFeedback(id)"
+                              ValidationState="@GetValidationState(id)" />
+                }
+            </div>
+        }
+    }
+    
+    <Button Variant="ButtonVariant.Primary"
+            Content="@("Submit")" />
+</form>

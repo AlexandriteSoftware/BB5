@@ -24,8 +24,10 @@ public partial class Input
     [Parameter]
     public ElementSize Size { get; set; }
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Attributes { get; set; }
+
     private string Classes { get; set; } = "";
-    private Dictionary<string, object> Attributes { get; } = [];
 
     protected override void OnParametersSet()
     {
@@ -54,6 +56,8 @@ public partial class Input
             string.Join(
                 " ",
                 classList);
+
+        Attributes ??= [];
 
         if (!string.IsNullOrEmpty(Id))
             Attributes["id"] = Id;
