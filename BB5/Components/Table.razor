@@ -1,0 +1,28 @@
+﻿<table @attributes="@Attributes">
+    <thead>
+        @foreach (var column in Columns)
+        {
+            <th>@column</th>
+        }
+    </thead>
+    <tbody>
+        @foreach (var row in Rows)
+        {
+            <tr>
+                @foreach (var cell in row)
+                {
+                    <td>
+                        @if (cell is MarkupString markupContent)
+                        {
+                            @markupContent
+                        }
+                        else
+                        {
+                            @cell
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

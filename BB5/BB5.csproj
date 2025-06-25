@@ -2,7 +2,12 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <PackageId>BB5</PackageId>
+    <Version>1.0.1</Version>
+    <Authors>Alexandrite Software Ltd</Authors>
+    <Description>BB5 is a powerful set of Blazor components built on top of Bootstrap 5.</Description>
+    <RepositoryUrl>https://github.com/AlexandriteSoftware/BB5</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <SupportedPlatform Include="browser"/>

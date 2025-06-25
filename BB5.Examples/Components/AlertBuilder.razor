@@ -1,0 +1,109 @@
+﻿@using BB5.Components
+
+<div class="row">
+    <div class="col-4">
+        <div class="mb-3">
+            <div class="form-label">Color</div>
+            <select class="form-select"
+                    style="max-width: 200px;"
+                    value="@Color"
+                    @onchange="ColorUpdated">
+                @foreach (var color in Enum.GetNames<AlertColor>())
+                {
+                    <option value="@color">@color</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <div class="form-label">Content</div>
+            <textarea class="form-control"
+                      value="@Content"
+                      @oninput="ContentUpdated"></textarea>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input"
+                   id="builder-alert-dismissible"
+                   type="checkbox"
+                   value="@Dismissible"
+                   @oninput="DismissibleUpdated">
+            <label class="form-check-label"
+                   for="builder-alert-dismissible">
+                Dismissible
+            </label>
+        </div>
+        <ClassBuilder OnClassUpdated="HandleStyleUpdate" />
+    </div>
+    <div class="col-8">
+        <div class="m-3">
+            <Alert Color="@AlertColor"
+                   Class="@AlertClass"
+                   Dismissible="@AlertDismissible"
+                   Content="@AlertContent"
+                   OnDismiss="@DismissAsync" />
+        </div>
+    </div>
+</div>
+
+@code {
+    private AlertColor Color { get; set; } =
+        AlertColor.Primary;
+    
+    private string Content { get; set; } =
+        "This is an alert.";
+    
+    private bool Dismissible { get; set; }
+
+    private AlertColor AlertColor { get; set; }
+
+    private object? AlertContent { get; set; }
+
+    private string? AlertClass { get; set; } = "";
+    
+    private bool AlertDismissible { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        AlertColor = Color;
+        AlertContent = Content;
+        AlertDismissible = Dismissible;
+    }
+
+    private void ColorUpdated(
+        ChangeEventArgs args)
+    {
+        AlertColor =
+            Enum.Parse<AlertColor>(
+                args.Value?.ToString()
+                ?? "Primary");
+    }
+
+    private void ContentUpdated(
+        ChangeEventArgs args)
+    {
+        AlertContent =
+            args.Value?.ToString() ?? "";
+    }
+    
+    private void DismissibleUpdated(
+        ChangeEventArgs args)
+    {
+        AlertDismissible =
+            args.Value is true;
+    }
+
+    private void HandleStyleUpdate(
+        string style)
+    {
+        AlertClass = style;
+    }
+    
+    private async Task DismissAsync()
+    {
+        var content = AlertContent; 
+        AlertContent = null;
+        await Task.Delay(TimeSpan.FromSeconds(2));
+        AlertContent = content;
+    }
+}

@@ -6,7 +6,7 @@ namespace BB5.Components;
 public partial class Label
 {
     [Parameter]
-    public string Content { get; set; } = "";
+    public object? Content { get; set; }
     
     [Parameter]
     public ContentType ContentType { get; set; } = ContentType.Text;

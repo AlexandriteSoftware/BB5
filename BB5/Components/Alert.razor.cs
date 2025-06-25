@@ -5,17 +5,27 @@ using Microsoft.AspNetCore.Components;
 
 namespace BB5.Components;
 
+public enum AlertColor
+{
+    Default,
+    Primary,
+    Secondary,
+    Success,
+    Danger,
+    Warning,
+    Info,
+    Light,
+    Dark
+}
+
 public partial class Alert
 {
     [Parameter]
-    public AttentionState AttentionState { get; set; }
+    public AlertColor Color { get; set; }
 
     [Parameter]
-    public string Content { get; set; } = "";
+    public object? Content { get; set; }
     
-    [Parameter]
-    public ContentType ContentType { get; set; } = ContentType.Text;
-
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
@@ -41,6 +51,40 @@ public partial class Alert
                 "alert"
             };
 
+        if (Dismissible)
+            classes.Add("alert-dismissible");
+
+        switch (Color)
+        {
+            case AlertColor.Primary:
+                classes.Add("alert-primary");
+                break;
+            case AlertColor.Secondary:
+                classes.Add("alert-secondary");
+                break;
+            case AlertColor.Success:
+                classes.Add("alert-success");
+                break;
+            case AlertColor.Danger:
+                classes.Add("alert-danger");
+                break;
+            case AlertColor.Warning:
+                classes.Add("alert-warning");
+                break;
+            case AlertColor.Info:
+                classes.Add("alert-info");
+                break;
+            case AlertColor.Light:
+                classes.Add("alert-light");
+                break;
+            case AlertColor.Dark:
+                classes.Add("alert-dark");
+                break;
+            case AlertColor.Default:
+            default:
+                break;
+        }
+
         if (!string.IsNullOrEmpty(Class))
         {
             classes.AddRange(
@@ -49,41 +93,9 @@ public partial class Alert
                     StringSplitOptions.RemoveEmptyEntries));
         }
 
-        if (Dismissible)
-            classes.Add("alert-dismissible");
-
-        switch (AttentionState)
-        {
-            case AttentionState.Primary:
-                classes.Add("alert-primary");
-                break;
-            case AttentionState.Secondary:
-                classes.Add("alert-secondary");
-                break;
-            case AttentionState.Success:
-                classes.Add("alert-success");
-                break;
-            case AttentionState.Danger:
-                classes.Add("alert-danger");
-                break;
-            case AttentionState.Warning:
-                classes.Add("alert-warning");
-                break;
-            case AttentionState.Info:
-                classes.Add("alert-info");
-                break;
-            case AttentionState.Light:
-                classes.Add("alert-light");
-                break;
-            case AttentionState.Dark:
-                classes.Add("alert-dark");
-                break;
-            case AttentionState.None:
-            default:
-                break;
-        }
-
         Attributes ??= [];
+
+        Attributes["role"] = "alert";
 
         Attributes["class"] =
             string.Join(

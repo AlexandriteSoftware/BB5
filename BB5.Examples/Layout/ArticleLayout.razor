@@ -1,0 +1,31 @@
+﻿@inherits LayoutComponentBase
+
+@layout MainLayout
+
+<div class="container">
+    <div class="row align-items-start">
+        <div class="col-3">
+            <div class="mt-3">
+                <p class="lead">Components</p>
+                <div class="list-group list-group-flush">
+                    <a href="/components/alert" class="list-group-item list-group-item-action">
+                        Alert
+                    </a>
+                    <a href="/components/button" class="list-group-item list-group-item-action">
+                        Button
+                    </a>
+                    <a href="/components/table" class="list-group-item list-group-item-action">
+                        Table
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            @Body
+        </div>
+    </div>
+</div>
+
+@code {
+    
+}

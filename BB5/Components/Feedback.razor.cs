@@ -9,7 +9,7 @@ public partial class Feedback
     public ValidationState ValidationState { get; set; }
 
     [Parameter]
-    public string Content { get; set; } = "";
+    public object? Content { get; set; }
     
     [Parameter]
     public ContentType ContentType { get; set; } = ContentType.Text;

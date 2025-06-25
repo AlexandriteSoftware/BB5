@@ -6,10 +6,10 @@ namespace BB5.Components;
 public partial class Badge
 {
     [Parameter]
-    public AttentionState AttentionState { get; set; }
+    public Color Color { get; set; }
 
     [Parameter]
-    public string Content { get; set; } = "";
+    public object? Content { get; set; }
     
     [Parameter]
     public ContentType ContentType { get; set; } = ContentType.Text;
@@ -29,33 +29,33 @@ public partial class Badge
                 "badge"
             };
         
-        switch (AttentionState)
+        switch (Color)
         {
-            case AttentionState.Primary:
+            case Color.Primary:
                 classList.Add("text-bg-primary");
                 break;
-            case AttentionState.Secondary:
+            case Color.Secondary:
                 classList.Add("text-bg-secondary");
                 break;
-            case AttentionState.Success:
+            case Color.Success:
                 classList.Add("text-bg-success");
                 break;
-            case AttentionState.Danger:
+            case Color.Danger:
                 classList.Add("text-bg-danger");
                 break;
-            case AttentionState.Warning:
+            case Color.Warning:
                 classList.Add("text-bg-warning");
                 break;
-            case AttentionState.Info:
+            case Color.Info:
                 classList.Add("text-bg-info");
                 break;
-            case AttentionState.Light:
+            case Color.Light:
                 classList.Add("text-bg-light");
                 break;
-            case AttentionState.Dark:
+            case Color.Dark:
                 classList.Add("text-bg-dark");
                 break;
-            case AttentionState.None:
+            case Color.None:
             default:
                 break;
         }

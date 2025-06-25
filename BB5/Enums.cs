@@ -7,7 +7,7 @@ public enum ValidationState
     Invalid
 }
 
-public enum AttentionState
+public enum Color
 {
     None,
     Primary,
@@ -18,6 +18,14 @@ public enum AttentionState
     Info,
     Light,
     Dark
+}
+
+public enum Shadow
+{
+    None,
+    Small,
+    Normal,
+    Large
 }
 
 public enum ElementSize

@@ -1,25 +1,16 @@
-﻿@using BB5.Services
-@namespace BB5.Components
+﻿@namespace BB5.Components
 
-@inject IMarkdownRenderer MarkdownRenderer
-
-@if (!string.IsNullOrEmpty(Content)
-    || ChildContent is not null)
+@if (Content is not null
+     || ChildContent is not null)
 {
     <div class="@Classes">
-        @switch (ContentType)
+        @if (Content is MarkupString markupContent)
         {
-            case ContentType.Html:
-                @((MarkupString)Content)
-                break;
-            case ContentType.Markdown:
-                @(MarkdownRenderer.ToHtml(Content))
-                break;
-            case ContentType.Text:
-            default:
-                @Content
-                break;
-                
+            @markupContent
+        }
+        else
+        {
+            @Content
         }
         
         @ChildContent

@@ -1,16 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
 namespace BB5.Components;
 
+public enum ButtonVariant
+{
+    Default,
+    Primary,
+    Secondary,
+    Success,
+    Danger,
+    Warning,
+    Info,
+    Light,
+    Dark,
+    Link
+}
+
 public partial class Button
 {
     [Parameter]
-    public AttentionState AttentionState { get; set; }
+    public ButtonVariant Variant { get; set; }
 
     [Parameter]
-    public string Content { get; set; } = "";
+    public object? Content { get; set; }
     
     [Parameter]
     public ContentType ContentType { get; set; } = ContentType.Text;
@@ -30,14 +45,17 @@ public partial class Button
     [Parameter]
     public bool Disabled { get; set; }
 
-    private string Classes { get; set; } = "";
-    private Dictionary<string, object> Attributes { get; } = [];
+    [Parameter]
+    public string Class { get; set; } = "";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Attributes { get; set; }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        var classList =
+        var classes =
             new List<string>
             {
                 "btn"
@@ -48,33 +66,36 @@ public partial class Button
                 ? "btn-outline"
                 : "btn";
 
-        switch (AttentionState)
+        switch (Variant)
         {
-            case AttentionState.Primary:
-                classList.Add(btnClass + "-primary");
+            case ButtonVariant.Primary:
+                classes.Add(btnClass + "-primary");
                 break;
-            case AttentionState.Secondary:
-                classList.Add(btnClass + "-secondary");
+            case ButtonVariant.Secondary:
+                classes.Add(btnClass + "-secondary");
                 break;
-            case AttentionState.Success:
-                classList.Add(btnClass + "-success");
+            case ButtonVariant.Success:
+                classes.Add(btnClass + "-success");
                 break;
-            case AttentionState.Danger:
-                classList.Add(btnClass + "-danger");
+            case ButtonVariant.Danger:
+                classes.Add(btnClass + "-danger");
                 break;
-            case AttentionState.Warning:
-                classList.Add(btnClass + "-warning");
+            case ButtonVariant.Warning:
+                classes.Add(btnClass + "-warning");
                 break;
-            case AttentionState.Info:
-                classList.Add(btnClass + "-info");
+            case ButtonVariant.Info:
+                classes.Add(btnClass + "-info");
                 break;
-            case AttentionState.Light:
-                classList.Add(btnClass + "-light");
+            case ButtonVariant.Light:
+                classes.Add(btnClass + "-light");
                 break;
-            case AttentionState.Dark:
-                classList.Add(btnClass + "-dark");
+            case ButtonVariant.Dark:
+                classes.Add(btnClass + "-dark");
                 break;
-            case AttentionState.None:
+            case ButtonVariant.Link:
+                classes.Add("btn-link");
+                break;
+            case ButtonVariant.Default:
             default:
                 break;
         }
@@ -82,21 +103,31 @@ public partial class Button
         switch (Size)
         {
             case ElementSize.Small:
-                classList.Add("btn-sm");
+                classes.Add("btn-sm");
                 break;
             case ElementSize.Large:
-                classList.Add("btn-lg");
+                classes.Add("btn-lg");
                 break;
             case ElementSize.Normal:
             default:
                 break;
         }
+
+        if (!string.IsNullOrEmpty(Class))
+        {
+            classes.AddRange(
+                Class.Split(
+                    ',',
+                    StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        Attributes ??= [];
         
-        Classes =
+        Attributes["class"] =
             string.Join(
                 " ",
-                classList);
-        
+                classes);
+
         if (Disabled)
             Attributes.Add("disabled", "1");
     }

@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{FB3C4571
 		CONTRIBUTING.md = CONTRIBUTING.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BB5.Examples", "BB5.Examples\BB5.Examples.csproj", "{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{C68CD914-18F0-4094-A0ED-3944EFA26603}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C68CD914-18F0-4094-A0ED-3944EFA26603}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C68CD914-18F0-4094-A0ED-3944EFA26603}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
