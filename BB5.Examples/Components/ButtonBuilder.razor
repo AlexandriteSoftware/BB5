@@ -2,32 +2,16 @@
 
 <div class="row">
     <div class="col-4">
-        <div class="mb-3">
-            <InputLabel Content="@("Variant")" />
-            <Select Value="@(Enum.GetName(Variant))"
-                    Items="@(Enum.GetNames<ButtonVariant>())"
-                    ValueChanged="VariantUpdated" />
-        </div>
-        <div class="mb-3">
-            <InputLabel Content="@("Content")" />
-            <BB5.InputText Value="@Content"
-                           ValueChanged="ContentUpdated" />
-        </div>
-        <div class="mb-3">
-            <BB5.InputCheckbox Id="builder-button-outline"
-                               Value="@Outline"
-                               ValueChanged="OutlineUpdated" />
-            <InputCheckLabel For="builder-button-outline"
-                             Content="@("Outline")" />
-        </div>
-        <ClassBuilder OnClassUpdated="HandleStyleUpdate" />
+        <Form Object="Properties"
+              OnModified="@(() => PropertiesUpdated())" />
+        <ClassBuilder OnClassUpdated="HandleStyleUpdate"/>
     </div>
     <div class="col-8">
         <div class="m-3">
-            <Button Variant="@ButtonVariant"
+            <Button Variant="@Properties.Variant"
                     Class="@ButtonClass"
-                    Outline="@ButtonOutline"
-                    Content="@ButtonContent" />
+                    Outline="@Properties.Outline"
+                    Content="@Properties.Content" />
         </div>
     </div>
 </div>

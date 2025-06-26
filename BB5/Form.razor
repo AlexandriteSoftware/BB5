@@ -19,16 +19,21 @@
         var id = property.Name;
 
         <div class="mb-3">
-            <InputLabel Content="@displayName" />
-            
             @if (property.PropertyType.IsEnum)
             {
                 var propertyValue = property.GetValue(Object);
 
                 <div class="mb-3">
+                    <InputLabel Content="@displayName" />
                     <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
                             Items="@(Enum.GetNames(property.PropertyType))"
-                            ValueChanged="@(value => property.SetValue(Object, Enum.Parse(property.PropertyType, value)))" />
+                            ValueChanged="@(async value =>
+                                          {
+                                              property.SetValue(Object, Enum.Parse(property.PropertyType, value));
+                                              await OnModified.InvokeAsync();
+                                          })" />
+                    <Feedback Content="@GetValidationFeedback(id)"
+                              ValidationState="@GetValidationState(id)" />
                 </div>
             }
             
@@ -38,8 +43,14 @@
 
                 <div class="mb-3">
                     <BB5.InputCheckbox Value="@propertyValue"
-                                       ValueChanged="@(value => property.SetValue(Object, value))"/>
+                                       ValueChanged="@(async value =>
+                                                     {
+                                                         property.SetValue(Object, value);
+                                                         await OnModified.InvokeAsync();
+                                                     })"/>
                     <InputCheckLabel Content="@displayName"/>
+                    <Feedback Content="@GetValidationFeedback(id)"
+                              ValidationState="@GetValidationState(id)" />
                 </div>
             }
 
@@ -48,6 +59,8 @@
                 var valueText = property.GetValue(Object)?.ToString() ?? "";
                 var readOnly = !property.CanWrite;
                 
+                <InputLabel Content="@displayName" />
+            
                 @if (readOnly)
                 {
                     <InputText Value="@valueText"
@@ -65,13 +78,21 @@
                     if (isPassword)
                     {
                         <InputPassword ValidationState="@GetValidationState(id)"
-                                       ValueChanged="@(value => property.SetValue(Object, value))" />
+                                       ValueChanged="@(async value =>
+                                                     {
+                                                         property.SetValue(Object, value);
+                                                         await OnModified.InvokeAsync();
+                                                     })" />
                     }
                     else
                     {
                         <InputText Value="@valueText"
                                    ValidationState="@GetValidationState(id)"
-                                   ValueChanged="@(value => property.SetValue(Object, value))"/>
+                                   ValueChanged="@(async value =>
+                                                 {
+                                                     property.SetValue(Object, value);
+                                                     await OnModified.InvokeAsync();
+                                                 })"/>
                     }
 
                     <Feedback Content="@GetValidationFeedback(id)"
@@ -81,7 +102,5 @@
         </div>
     }
     
-    <Button Variant="ButtonVariant.Primary"
-            Content="@("Submit")"
-            OnClick="@(async () => await OnSubmit.InvokeAsync(Object))" />
+    @Actions
 </form>

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
 namespace BB5;
@@ -9,16 +10,20 @@ namespace BB5;
 public partial class Table
 {
     [Parameter]
+    public object? Items { get; set; }
+    
+    [Parameter]
+    public EventCallback<object> OnActivate { get; set; }
+
+    [Parameter]
     public string Class { get; set; } = "";
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
 
-    [Parameter]
-    public object? Items { get; set; }
-    
-    private List<string> Columns { get; set; } = new();
-    private List<List<object?>> Rows { get; set; } = new();
+    private List<object?> Objects { get; set; } = [];
+    private List<string> Columns { get; set; } = [];
+    private List<List<object?>> Rows { get; set; } = [];
 
     protected override void OnParametersSet()
     {
@@ -45,20 +50,28 @@ public partial class Table
                 " ",
                 classes);
 
-        (Columns, Rows) = GetCells(Items);
+        UpdateState(Items);
     }
 
-    private (List<string> Columns, List<List<object?>> Rows) GetCells(
+    private void UpdateState(
         object? items)
     {
+        if (items is not IEnumerable enumerable)
+        {
+            Objects = [];
+            Columns = [];
+            Rows = [];
+            return;
+        }
+        
         var columns = new List<string>();
         var rows = new List<List<object?>>();
+        var objects = new List<object?>();
 
-        if (items is not IEnumerable enumerable)
-            return ([], []);
-        
         foreach (var item in enumerable)
         {
+            objects.Add(item);
+
             var row =
                 new List<object?>(
                     Enumerable.Repeat("", columns.Count));
@@ -93,7 +106,16 @@ public partial class Table
                         columns.Count - row.Count));
             }
         }
-        
-        return (columns, rows);
+
+        Objects = objects;
+        Columns = columns;
+        Rows = rows;
+    }
+
+    private async Task ActivateAsync(
+        int rowIndex)
+    {
+        await OnActivate.InvokeAsync(
+            Objects[rowIndex]);
     }
 }

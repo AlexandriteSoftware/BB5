@@ -6,23 +6,48 @@
         }
     </thead>
     <tbody>
+        @{ var rowIndex = 0; }
         @foreach (var row in Rows)
         {
             <tr>
+                @{ var cellIndex = 0; }
                 @foreach (var cell in row)
                 {
                     <td>
-                        @if (cell is MarkupString markupContent)
+                        @if (cellIndex == 0)
                         {
-                            @markupContent
+                            var localRowIndex = rowIndex;
+                            <a href="#"
+                               @onclick:preventDefault
+                               @onclick="async _ => await ActivateAsync(localRowIndex)">
+                                @if (cell is MarkupString markupContent)
+                                {
+                                    @markupContent
+                                }
+                                else
+                                {
+                                    @cell
+                                }
+                            </a>
                         }
                         else
                         {
-                            @cell
+                            @if (cell is MarkupString markupContent)
+                            {
+                                @markupContent
+                            }
+                            else
+                            {
+                                @cell
+                            }
                         }
                     </td>
+
+                    cellIndex++;
                 }
             </tr>
+
+            rowIndex++;
         }
     </tbody>
 </table>

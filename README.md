@@ -40,12 +40,11 @@ Users = new List<User> {
 };
 
 // 3. Use BB5 components to display and edit users.
-// 3.1. DataGrid uses reflection to render columns
-<DataGrid ItemsSource="@users"
-          EditLinkColumn="Name"
-          OnEdit="@(obj => User = obj as User)" />
-// 3.2. Record uses reflection to generate fields
-<Record Object="@User" />
+// 3.1. Table uses reflection to render columns
+<Table Items="@users"
+       OnActivate="@(obj => User = obj as User)" />
+// 3.2. Form uses reflection to generate fields
+<Form Object="@User" />
 ```
 
 ## 🧩 What’s Inside?
@@ -55,20 +54,15 @@ Users = new List<User> {
 Essential Blazor elements styled with Bootstrap 5: buttons, inputs, layout
 grids, modals, tabs, and more. Fully customisable and composable.
 
-### 📄 Record Forms
+### 📄 Form
 
 Generate entire forms from a model definition. Supports validation, layout
 presets, custom field components, and save/cancel logic with hooks.
 
-### 📊 DataGrids
+### 📊 Table
 
 Dynamic, responsive tables with built-in pagination, sorting, inline actions,
 and optional editing modes. Just bind a list—BB5 handles the rest.
-
-### ⚙️ Action Framework
-
-Wire up buttons and interactions to your business logic with zero ceremony.
-Define actions declaratively or with minimal C# code.
 
 ## 🛠️ Designed for Developers
 

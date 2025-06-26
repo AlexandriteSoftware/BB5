@@ -9,8 +9,14 @@ public partial class Form
     public object? Object { get; set; }
     
     [Parameter]
-    public EventCallback<object?> OnSubmit { get; set; }
+    public EventCallback OnModified { get; set; }
 
+    [Parameter]
+    public EventCallback<object?> OnSubmit { get; set; }
+    
+    [Parameter]
+    public RenderFragment Actions { get; set; }
+    
     private async Task HandleSubmit()
     {
         await OnSubmit.InvokeAsync();
@@ -19,12 +25,12 @@ public partial class Form
     private string GetValidationFeedback(
         string id)
     {
-        return "OK";
+        return "";
     }
 
     private ValidationState GetValidationState(
         string id)
     {
-        return ValidationState.Valid;
+        return ValidationState.None;
     }
 }

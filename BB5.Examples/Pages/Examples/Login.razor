@@ -1,0 +1,21 @@
+﻿@page "/examples/login"
+
+@using BB5.Examples.Layout
+
+@layout ArticleLayout
+
+<h1 class="display-5 mt-5">Login</h1>
+
+<Form Object="LoginModel"
+      OnSubmit="HandleLogin">
+    <Actions>
+        <Button OnClick="HandleLogin"
+                Variant="ButtonVariant.Primary"
+                Content="@("Login")" />
+    </Actions>
+</Form>
+
+<Alert Content="@Message"
+       Class="mt-3"
+       Color="AlertColor.Success" />
+

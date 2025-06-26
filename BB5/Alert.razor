@@ -1,5 +1,11 @@
 ﻿@namespace BB5
 
+@if (string.IsNullOrEmpty(Content?.ToString())
+     && ChildContent is null)
+{
+    return;
+}
+
 <div @attributes="@Attributes">
     @if (Content is MarkupString markupContent)
     {

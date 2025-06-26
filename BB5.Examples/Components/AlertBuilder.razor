@@ -2,16 +2,19 @@
 
 <div class="row">
     <div class="col-4">
-        <Form Object="AlertProperties"
-              OnSubmit="AlertPropertiesUpdated" />
+        <Form Object="Properties"
+              OnModified="@(() => PropertiesUpdated())" />
         <ClassBuilder OnClassUpdated="HandleStyleUpdate"/>
     </div>
     <div class="col-8">
         <div class="m-3">
-            <Alert Color="@AlertColor"
+            <Alert Color="@Properties.Color"
                    Class="@AlertClass"
-                   Dismissible="@AlertDismissible"
-                   Content="@AlertContent" />
-        </div>
+                   Dismissible="@Properties.Dismissible"
+                   Content="@(
+                            Properties.ContentIsMarkup
+                            ? (MarkupString)Properties.Content
+                            : Properties.Content)" />
+            </div>
     </div>
 </div>
