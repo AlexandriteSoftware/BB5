@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <PackageId>BB5</PackageId>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>../README.md</PackageReadmeFile>
     <Version>1.0.3</Version>
     <Authors>Alexandrite Software Ltd</Authors>
     <Description>BB5 is a powerful set of Blazor components built on top of Bootstrap 5.</Description>

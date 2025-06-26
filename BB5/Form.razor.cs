@@ -15,7 +15,7 @@ public partial class Form
     public EventCallback<object?> OnSubmit { get; set; }
     
     [Parameter]
-    public RenderFragment Actions { get; set; }
+    public RenderFragment? Actions { get; set; }
     
     private async Task HandleSubmit()
     {
