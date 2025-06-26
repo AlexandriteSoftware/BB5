@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Components;
 
-namespace BB5.Components;
+namespace BB5;
 
 public partial class Table
 {

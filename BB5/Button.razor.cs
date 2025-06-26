@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
-namespace BB5.Components;
+namespace BB5;
 
 public enum ButtonVariant
 {
@@ -19,6 +19,13 @@ public enum ButtonVariant
     Link
 }
 
+public enum ButtonSize
+{
+    Default,
+    Small,
+    Large
+}
+
 public partial class Button
 {
     [Parameter]
@@ -27,9 +34,6 @@ public partial class Button
     [Parameter]
     public object? Content { get; set; }
     
-    [Parameter]
-    public ContentType ContentType { get; set; } = ContentType.Text;
-
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
@@ -40,7 +44,7 @@ public partial class Button
     public bool Outline { get; set; }
     
     [Parameter]
-    public ElementSize Size { get; set; }
+    public ButtonSize Size { get; set; }
     
     [Parameter]
     public bool Disabled { get; set; }
@@ -102,13 +106,13 @@ public partial class Button
         
         switch (Size)
         {
-            case ElementSize.Small:
+            case ButtonSize.Small:
                 classes.Add("btn-sm");
                 break;
-            case ElementSize.Large:
+            case ButtonSize.Large:
                 classes.Add("btn-lg");
                 break;
-            case ElementSize.Normal:
+            case ButtonSize.Default:
             default:
                 break;
         }

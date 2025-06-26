@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
-namespace BB5.Components;
+namespace BB5;
 
 public partial class Feedback
 {
@@ -11,9 +11,6 @@ public partial class Feedback
     [Parameter]
     public object? Content { get; set; }
     
-    [Parameter]
-    public ContentType ContentType { get; set; } = ContentType.Text;
-
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 

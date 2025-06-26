@@ -1,35 +1,24 @@
-﻿@using BB5.Components
+﻿@using BB5
 
 <div class="row">
     <div class="col-4">
         <div class="mb-3">
-            <div class="form-label">Variant</div>
-            <select class="form-select"
-                    style="max-width: 200px;"
-                    value="@Variant"
-                    @onchange="VariantUpdated">
-                @foreach (var item in Enum.GetNames<ButtonVariant>())
-                {
-                    <option value="@item">@item</option>
-                }
-            </select>
+            <InputLabel Content="@("Variant")" />
+            <Select Value="@(Enum.GetName(Variant))"
+                    Items="@(Enum.GetNames<ButtonVariant>())"
+                    ValueChanged="VariantUpdated" />
         </div>
         <div class="mb-3">
-            <div class="form-label">Content</div>
-            <textarea class="form-control"
-                      value="@Content"
-                      @oninput="ContentUpdated"></textarea>
+            <InputLabel Content="@("Content")" />
+            <BB5.InputText Value="@Content"
+                           ValueChanged="ContentUpdated" />
         </div>
         <div class="mb-3">
-            <input class="form-check-input"
-                   id="builder-button-outline"
-                   type="checkbox"
-                   value="@Outline"
-                   @oninput="OutlineUpdated">
-            <label class="form-check-label"
-                   for="builder-button-outline">
-                Outline
-            </label>
+            <BB5.InputCheckbox Id="builder-button-outline"
+                               Value="@Outline"
+                               ValueChanged="OutlineUpdated" />
+            <InputCheckLabel For="builder-button-outline"
+                             Content="@("Outline")" />
         </div>
         <ClassBuilder OnClassUpdated="HandleStyleUpdate" />
     </div>
@@ -42,58 +31,3 @@
         </div>
     </div>
 </div>
-
-@code {
-    private ButtonVariant Variant { get; set; } =
-        ButtonVariant.Primary;
-    
-    private string Content { get; set; } =
-        "Button";
-    
-    private bool Outline { get; set; }
-    
-    private ButtonVariant ButtonVariant { get; set; }
-
-    private object? ButtonContent { get; set; }
-
-    private string? ButtonClass { get; set; } = "";
-    
-    private bool ButtonOutline { get; set; }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        ButtonVariant = Variant;
-        ButtonContent = Content;
-        ButtonOutline = Outline;
-    }
-
-    private void VariantUpdated(
-        ChangeEventArgs args)
-    {
-        ButtonVariant =
-            Enum.Parse<ButtonVariant>(
-                args.Value?.ToString()
-                ?? "Primary");
-    }
-
-    private void ContentUpdated(
-        ChangeEventArgs args)
-    {
-        ButtonContent =
-            args.Value?.ToString() ?? "";
-    }
-    
-    private void HandleStyleUpdate(
-        string style)
-    {
-        ButtonClass = style;
-    }
-
-    private void OutlineUpdated(
-        ChangeEventArgs e)
-    {
-        ButtonOutline = e.Value is true;
-    }
-}

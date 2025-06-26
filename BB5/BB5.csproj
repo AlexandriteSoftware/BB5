@@ -15,13 +15,4 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.6"/>
   </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="Components\Alert.razor" />
-    <AdditionalFiles Include="Components\Badge.razor" />
-    <AdditionalFiles Include="Components\Button.razor" />
-    <AdditionalFiles Include="Components\Feedback.razor" />
-    <AdditionalFiles Include="Components\Input.razor" />
-    <AdditionalFiles Include="Components\Label.razor" />
-    <AdditionalFiles Include="Components\Textarea.razor" />
-  </ItemGroup>
 </Project>

@@ -1,0 +1,87 @@
+﻿@using System.ComponentModel
+@using System.Reflection
+
+<form @onsubmit="HandleSubmit">
+    @foreach (var property in Item?.GetType().GetProperties()
+                              ?? Enumerable.Empty<PropertyInfo>())
+    {
+        var displayNameAttribute =
+            property
+                .GetCustomAttributes(
+                    typeof(DisplayNameAttribute),
+                    false)
+                .FirstOrDefault() as DisplayNameAttribute;
+
+        var displayName =
+            displayNameAttribute?.DisplayName
+            ?? property.Name;
+
+        var id = property.Name;
+
+        <div class="mb-3">
+            <InputLabel Content="@displayName" />
+            
+            @if (property.PropertyType.IsEnum)
+            {
+                var propertyValue = property.GetValue(Item);
+
+                <div class="mb-3">
+                    <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
+                            Items="@(Enum.GetNames(property.PropertyType))"
+                            ValueChanged="@(value => property.SetValue(Item, Enum.Parse(property.PropertyType, value)))" />
+                </div>
+            }
+            
+            @if (typeof(bool) == property.PropertyType)
+            {
+                var propertyValue = property.GetValue(Item) is true;
+
+                <div class="mb-3">
+                    <BB5.InputCheckbox Value="@propertyValue"
+                                       ValueChanged="@(value => property.SetValue(Item, value))"/>
+                    <InputCheckLabel Content="@displayName"/>
+                </div>
+            }
+
+            @if (typeof(string) == property.PropertyType)
+            {
+                var valueText = property.GetValue(Item)?.ToString() ?? "";
+                var readOnly = !property.CanWrite;
+                
+                @if (readOnly)
+                {
+                    <InputText Value="@valueText"
+                               Readonly="@true" />
+                }
+                else
+                {
+                    var isPassword =
+                        property
+                            .GetCustomAttributes(
+                                typeof(PasswordPropertyTextAttribute),
+                                false)
+                            .Any();
+                    
+                    if (isPassword)
+                    {
+                        <InputPassword ValidationState="@GetValidationState(id)"
+                                       ValueChanged="@(value => property.SetValue(Item, value))" />
+                    }
+                    else
+                    {
+                        <InputText Value="@valueText"
+                                   ValidationState="@GetValidationState(id)"
+                                   ValueChanged="@(value => property.SetValue(Item, value))"/>
+                    }
+
+                    <Feedback Content="@GetValidationFeedback(id)"
+                              ValidationState="@GetValidationState(id)" />
+                }
+            }
+        </div>
+    }
+    
+    <Button Variant="ButtonVariant.Primary"
+            Content="@("Apply")"
+            OnClick="@(async () => await OnSubmit.InvokeAsync(Item))" />
+</form>

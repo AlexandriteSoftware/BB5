@@ -7,7 +7,7 @@ public enum ValidationState
     Invalid
 }
 
-public enum Color
+public enum TextBackgroundColor
 {
     None,
     Primary,
@@ -28,16 +28,9 @@ public enum Shadow
     Large
 }
 
-public enum ElementSize
+public enum FormControlSize
 {
-    Normal,
+    Default,
     Small,
     Large
-}
-
-public enum ContentType
-{
-    Text,
-    Html,
-    Markdown
 }

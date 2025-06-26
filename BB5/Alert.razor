@@ -1,12 +1,4 @@
-﻿@using Microsoft.AspNetCore.Components.Web
-
-@namespace BB5.Components
-
-@if (Content is null
-     && ChildContent is null)
-{
-    return;
-}
+﻿@namespace BB5
 
 <div @attributes="@Attributes">
     @if (Content is MarkupString markupContent)

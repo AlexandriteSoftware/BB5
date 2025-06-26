@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
-namespace BB5.Components;
+namespace BB5;
 
-public partial class Label
+public partial class InputCheckLabel
 {
     [Parameter]
     public object? Content { get; set; }
     
-    [Parameter]
-    public ContentType ContentType { get; set; } = ContentType.Text;
-
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
     
@@ -27,7 +24,7 @@ public partial class Label
         var classList =
             new List<string>
             {
-                "form-label"
+                "form-check-label"
             };
 
         Classes =

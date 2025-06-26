@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
-namespace BB5.Components;
+namespace BB5;
 
 public partial class Form
 {

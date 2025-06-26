@@ -1,60 +1,8 @@
-﻿<div class="mb-3">
-    <div class="form-label">Shadow</div>
-    <select class="form-select"
-            style="max-width: 200px;"
-            value="@Shadow"
-            @onchange="ShadowUpdatedAsync">
-        @foreach (var shadow in Enum.GetNames<Shadow>())
-        {
-            <option value="@shadow">@shadow</option>
-        }
-    </select>
+﻿@using BB5
+
+<div class="mb-3">
+    <InputLabel Content="@("Shadow")" />
+    <Select Value="@(Enum.GetName(Shadow))"
+            Items="@(Enum.GetNames<Shadow>())"
+            ValueChanged="ShadowUpdatedAsync" />
 </div>
-
-@code {
-    [Parameter]
-    public EventCallback<string> OnClassUpdated { get; set; }
-    
-    private Shadow Shadow { get; set; } =
-        Shadow.None;
-    
-    private Shadow SelectedShadow { get; set; }
-    
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        SelectedShadow = Shadow;
-    }
-
-    private async Task ShadowUpdatedAsync(
-        ChangeEventArgs e)
-    {
-        SelectedShadow =
-            Enum.Parse<Shadow>(
-                e.Value?.ToString() ?? "None");
-
-        await UpdateClassAsync();
-    }
-    
-    private async Task UpdateClassAsync()
-    {
-        var classes =
-            new List<string>
-            {
-                SelectedShadow switch
-                {
-                    Shadow.None => "",
-                    Shadow.Small => "shadow-sm",
-                    Shadow.Normal => "shadow",
-                    Shadow.Large => "shadow-lg",
-                    _ => ""
-                }
-            };
-
-        await OnClassUpdated.InvokeAsync(
-            string.Join(
-                " ",
-                classes.Where(item => item != "")));
-    }
-}
