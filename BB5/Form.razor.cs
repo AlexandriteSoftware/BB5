@@ -6,7 +6,7 @@ namespace BB5;
 public partial class Form
 {
     [Parameter]
-    public object? Item { get; set; }
+    public object? Object { get; set; }
     
     [Parameter]
     public EventCallback<object?> OnSubmit { get; set; }

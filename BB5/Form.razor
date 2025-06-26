@@ -2,7 +2,7 @@
 @using System.Reflection
 
 <form @onsubmit="HandleSubmit">
-    @foreach (var property in Item?.GetType().GetProperties()
+    @foreach (var property in Object?.GetType().GetProperties()
                               ?? Enumerable.Empty<PropertyInfo>())
     {
         var displayNameAttribute =
@@ -23,29 +23,29 @@
             
             @if (property.PropertyType.IsEnum)
             {
-                var propertyValue = property.GetValue(Item);
+                var propertyValue = property.GetValue(Object);
 
                 <div class="mb-3">
                     <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
                             Items="@(Enum.GetNames(property.PropertyType))"
-                            ValueChanged="@(value => property.SetValue(Item, Enum.Parse(property.PropertyType, value)))" />
+                            ValueChanged="@(value => property.SetValue(Object, Enum.Parse(property.PropertyType, value)))" />
                 </div>
             }
             
             @if (typeof(bool) == property.PropertyType)
             {
-                var propertyValue = property.GetValue(Item) is true;
+                var propertyValue = property.GetValue(Object) is true;
 
                 <div class="mb-3">
                     <BB5.InputCheckbox Value="@propertyValue"
-                                       ValueChanged="@(value => property.SetValue(Item, value))"/>
+                                       ValueChanged="@(value => property.SetValue(Object, value))"/>
                     <InputCheckLabel Content="@displayName"/>
                 </div>
             }
 
             @if (typeof(string) == property.PropertyType)
             {
-                var valueText = property.GetValue(Item)?.ToString() ?? "";
+                var valueText = property.GetValue(Object)?.ToString() ?? "";
                 var readOnly = !property.CanWrite;
                 
                 @if (readOnly)
@@ -65,13 +65,13 @@
                     if (isPassword)
                     {
                         <InputPassword ValidationState="@GetValidationState(id)"
-                                       ValueChanged="@(value => property.SetValue(Item, value))" />
+                                       ValueChanged="@(value => property.SetValue(Object, value))" />
                     }
                     else
                     {
                         <InputText Value="@valueText"
                                    ValidationState="@GetValidationState(id)"
-                                   ValueChanged="@(value => property.SetValue(Item, value))"/>
+                                   ValueChanged="@(value => property.SetValue(Object, value))"/>
                     }
 
                     <Feedback Content="@GetValidationFeedback(id)"
@@ -82,6 +82,6 @@
     }
     
     <Button Variant="ButtonVariant.Primary"
-            Content="@("Apply")"
-            OnClick="@(async () => await OnSubmit.InvokeAsync(Item))" />
+            Content="@("Submit")"
+            OnClick="@(async () => await OnSubmit.InvokeAsync(Object))" />
 </form>

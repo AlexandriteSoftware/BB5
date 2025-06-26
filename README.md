@@ -18,6 +18,36 @@ the problem of slow and repetitive UI development by providing:
 * **Minimal boilerplate**: Plug in your model, hook up a data source, and
   you're done.
 
+## 🧰 Use Case: View and edit users
+
+```csharp
+// 1. Define a simple user model. Use data annotations.
+public class User
+{
+    [Key]
+    public string Name { get; set; }
+    
+    [DisplayName("Email Address")]
+    public string Email { get; set; }
+}
+```
+
+```razor
+// 2. Create list of users 
+Users = new List<User> {
+    new User { Name = "Alice", Email = "alice@example.com" },
+    new User { Name = "Bob", Email = "bob@example.com" }
+};
+
+// 3. Use BB5 components to display and edit users.
+// 3.1. DataGrid uses reflection to render columns
+<DataGrid ItemsSource="@users"
+          EditLinkColumn="Name"
+          OnEdit="@(obj => User = obj as User)" />
+// 3.2. Record uses reflection to generate fields
+<Record Object="@User" />
+```
+
 ## 🧩 What’s Inside?
 
 ### ✅ Core Components
