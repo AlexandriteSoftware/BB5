@@ -20,7 +20,7 @@ public partial class InputText
     public string Id { get; set; } = "";
 
     [Parameter]
-    public FormControlSize Size { get; set; }
+    public ComponentSize Size { get; set; }
 
     [Parameter]
     public string Class { get; set; } = "";
@@ -62,13 +62,13 @@ public partial class InputText
 
         switch (Size)
         {
-            case FormControlSize.Small:
+            case ComponentSize.Small:
                 classes.Add("form-control-sm");
                 break;
-            case FormControlSize.Large:
+            case ComponentSize.Large:
                 classes.Add("form-control-lg");
                 break;
-            case FormControlSize.Default:
+            case ComponentSize.Default:
             default:
                 break;
         }

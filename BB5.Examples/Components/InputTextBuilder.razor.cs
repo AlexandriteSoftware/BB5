@@ -2,11 +2,11 @@
 
 public partial class InputTextBuilder
 {
-    private FormControlSize Size { get; set; } =
-        FormControlSize.Default;
+    private ComponentSize Size { get; set; } =
+        ComponentSize.Default;
 
     private bool ReadOnly { get; set; }
-    private FormControlSize InputTextSize { get; set; }
+    private ComponentSize InputTextSize { get; set; }
     private string? InputTextClass { get; set; } = "";
     private bool InputTextReadOnly { get; set; }
 
@@ -21,7 +21,7 @@ public partial class InputTextBuilder
     private void SizeUpdated(
         string value)
     {
-        InputTextSize = Enum.Parse<FormControlSize>(value);
+        InputTextSize = Enum.Parse<ComponentSize>(value);
     }
 
     private void ReadOnlyUpdated(

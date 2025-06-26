@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel
+@using System.Globalization
 @using System.Reflection
 
 <form @onsubmit="HandleSubmit">
@@ -52,6 +53,51 @@
                     <Feedback Content="@GetValidationFeedback(id)"
                               ValidationState="@GetValidationState(id)" />
                 </div>
+            }
+            
+            @if (typeof(int) == property.PropertyType)
+            {
+                var intValue =
+                    (int)(property.GetValue(Object) ?? 0);
+
+                var valueText =
+                    Convert.ToString(
+                        intValue,
+                        CultureInfo.InvariantCulture);
+
+                var readOnly = !property.CanWrite;
+                
+                <InputLabel Content="@displayName" />
+            
+                @if (readOnly)
+                {
+                    <InputText Value="@valueText"
+                               Readonly="@true" />
+                }
+                else
+                {
+                    <InputText Value="@valueText"
+                               ValidationState="@GetValidationState(id)"
+                               ValueChanged="@(async value =>
+                                             {
+                                                 if (!int.TryParse(
+                                                        value,
+                                                        CultureInfo.InvariantCulture,
+                                                        out var newIntValue))
+                                                 {
+                                                     return;
+                                                 }
+
+                                                 property.SetValue(
+                                                     Object,
+                                                     newIntValue);
+
+                                                 await OnModified.InvokeAsync();
+                                             })"/>
+
+                    <Feedback Content="@GetValidationFeedback(id)"
+                              ValidationState="@GetValidationState(id)" />
+                }
             }
 
             @if (typeof(string) == property.PropertyType)

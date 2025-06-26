@@ -28,7 +28,7 @@ public enum Shadow
     Large
 }
 
-public enum FormControlSize
+public enum ComponentSize
 {
     Default,
     Small,

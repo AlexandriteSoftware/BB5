@@ -6,13 +6,6 @@ using Microsoft.AspNetCore.Components;
 
 namespace BB5;
 
-public enum FormSelectSize
-{
-    Default,
-    Small,
-    Large
-}
-
 public class Option
 {
     public string Value { get; set; } = "";
@@ -38,17 +31,23 @@ public partial class Select
     public ValidationState ValidationState { get; set; }
 
     [Parameter]
-    public string Class { get; set; } = "";
-    
-    [Parameter]
     public bool ReadOnly { get; set; }
     
     [Parameter]
     public bool Disabled { get; set; }
     
     [Parameter]
-    public FormSelectSize Size { get; set; }
+    public ComponentSize Size { get; set; }
+    
+    [Parameter]
+    public bool Multiple { get; set; }
+    
+    [Parameter]
+    public int Rows { get; set; } = 4;
 
+    [Parameter]
+    public string Class { get; set; } = "";
+    
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
     
@@ -79,13 +78,13 @@ public partial class Select
 
         switch (Size)
         {
-            case FormSelectSize.Small:
+            case ComponentSize.Small:
                 classes.Add("form-select-sm");
                 break;
-            case FormSelectSize.Large:
+            case ComponentSize.Large:
                 classes.Add("form-select-lg");
                 break;
-            case FormSelectSize.Default:
+            case ComponentSize.Default:
             default:
                 break;
         }
@@ -99,6 +98,17 @@ public partial class Select
         }
 
         Attributes ??= [];
+
+        if (Multiple)
+        {
+            Attributes["multiple"] = "multiple";
+            Attributes["size"] = Rows;
+        }
+        else
+        {
+            Attributes.Remove("multiple");
+            Attributes.Remove("size");
+        }
 
         Attributes["class"] =
             string.Join(

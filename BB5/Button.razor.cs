@@ -19,13 +19,6 @@ public enum ButtonVariant
     Link
 }
 
-public enum ButtonSize
-{
-    Default,
-    Small,
-    Large
-}
-
 public partial class Button
 {
     [Parameter]
@@ -44,7 +37,7 @@ public partial class Button
     public bool Outline { get; set; }
     
     [Parameter]
-    public ButtonSize Size { get; set; }
+    public ComponentSize Size { get; set; }
     
     [Parameter]
     public bool Disabled { get; set; }
@@ -106,13 +99,13 @@ public partial class Button
         
         switch (Size)
         {
-            case ButtonSize.Small:
+            case ComponentSize.Small:
                 classes.Add("btn-sm");
                 break;
-            case ButtonSize.Large:
+            case ComponentSize.Large:
                 classes.Add("btn-lg");
                 break;
-            case ButtonSize.Default:
+            case ComponentSize.Default:
             default:
                 break;
         }

@@ -26,9 +26,4 @@ public partial class ButtonBuilder
     {
         ButtonClass = style;
     }
-
-    private void PropertiesUpdated()
-    {
-        StateHasChanged();
-    }
 }

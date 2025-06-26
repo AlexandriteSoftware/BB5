@@ -27,9 +27,4 @@ public partial class AlertBuilder
     {
         AlertClass = style;
     }
-
-    private void PropertiesUpdated()
-    {
-        StateHasChanged();
-    }
 }

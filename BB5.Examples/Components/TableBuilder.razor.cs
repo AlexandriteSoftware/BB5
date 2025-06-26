@@ -1,7 +1,11 @@
 ﻿namespace BB5.Examples.Components;
 
+public class TableProperties;
+
 public partial class TableBuilder
 {
+    private TableProperties Properties { get; set; } = new();
+
     private string? TableClass { get; set; } = "";
 
     private object? TableItems { get; set; } =
@@ -17,5 +21,11 @@ public partial class TableBuilder
         base.OnInitialized();
 
         TableClass = "";
+    }
+    
+    private void HandleStyleUpdate(
+        string style)
+    {
+        TableClass = style;
     }
 }

@@ -10,8 +10,12 @@ public class FormBuilderItem(
     public string Value { get; set; } = "";
 }
 
+public class FormProperties;
+
 public partial class FormBuilder
 {
+    private FormProperties Properties { get; set; } = new();
+
     private string? FormClass { get; set; } = "";
 
     private object? FormItem { get; set; } =
@@ -26,5 +30,11 @@ public partial class FormBuilder
         base.OnInitialized();
 
         FormClass = "";
+    }
+    
+    private void HandleStyleUpdate(
+        string style)
+    {
+        FormClass = style;
     }
 }
