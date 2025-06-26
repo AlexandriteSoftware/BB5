@@ -1,0 +1,18 @@
+<package>
+  <metadata>
+    <id>BB5</id>
+    <version>1.0.3</version>
+    <authors>Alexandrite Software</authors>
+    <description>BB5 is a powerful set of Blazor components built on top of Bootstrap 5.</description>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <readme>README.md</readme>
+    <dependencies>
+      <group targetFramework="net9.0">
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\net9.0\**\*.*" target="lib/net9.0" />
+    <file src="..\README.md" target="" />
+  </files>
+</package>

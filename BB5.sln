@@ -6,6 +6,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{FB3C4571
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		CONTRIBUTING.md = CONTRIBUTING.md
+		BB5.nuspec = BB5.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BB5.Examples", "BB5.Examples\BB5.Examples.csproj", "{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}"
