@@ -83,14 +83,59 @@
                                                  if (!int.TryParse(
                                                         value,
                                                         CultureInfo.InvariantCulture,
-                                                        out var newIntValue))
+                                                        out var typeValue))
                                                  {
                                                      return;
                                                  }
 
                                                  property.SetValue(
                                                      Object,
-                                                     newIntValue);
+                                                     typeValue);
+
+                                                 await OnModified.InvokeAsync();
+                                             })"/>
+
+                    <Feedback Content="@GetValidationFeedback(id)"
+                              ValidationState="@GetValidationState(id)" />
+                }
+            }
+
+            @if (typeof(decimal) == property.PropertyType)
+            {
+                var intValue =
+                    (decimal)(property.GetValue(Object) ?? 0);
+
+                var valueText =
+                    Convert.ToString(
+                        intValue,
+                        CultureInfo.InvariantCulture);
+
+                var readOnly = !property.CanWrite;
+                
+                <InputLabel Content="@displayName" />
+            
+                @if (readOnly)
+                {
+                    <InputText Value="@valueText"
+                               Readonly="@true" />
+                }
+                else
+                {
+                    <InputText Value="@valueText"
+                               ValidationState="@GetValidationState(id)"
+                               ValueChanged="@(async value =>
+                                             {
+                                                 if (!decimal.TryParse(
+                                                         value,
+                                                         CultureInfo.InvariantCulture,
+                                                         out var typeValue))
+                                                 {
+                                                     return;
+                                                 }
+
+                                                 property.SetValue(
+                                                     Object,
+                                                     typeValue);
 
                                                  await OnModified.InvokeAsync();
                                              })"/>
@@ -148,5 +193,7 @@
         </div>
     }
     
+    @Controls
+
     @Actions
 </form>

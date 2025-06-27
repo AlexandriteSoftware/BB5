@@ -4,14 +4,18 @@
 
 @layout ArticleLayout
 
-<h1 class="display-5 mt-5">Login</h1>
+<h1 class="display-5 mt-5">
+    Login
+</h1>
 
 <Form Object="LoginModel"
       OnSubmit="HandleLogin">
     <Actions>
         <Button OnClick="HandleLogin"
-                Variant="ButtonVariant.Primary"
-                Content="@("Login")" />
+                Variant="ButtonVariant.Primary">
+            <Icon Id="box-arrow-in-right" />
+            Login
+        </Button>
     </Actions>
 </Form>
 
