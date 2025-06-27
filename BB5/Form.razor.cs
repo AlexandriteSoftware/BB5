@@ -1,9 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
 namespace BB5;
+
+internal class FormControlInfo
+{
+    public string Id { get; init; } = "";
+
+    public string DisplayName { get; init; } = "";
+    
+    public bool IsReadOnly { get; init; } = false;
+    
+    public static FormControlInfo From(
+        PropertyInfo propertyInfo)
+    {
+        var displayNameAttribute =
+            propertyInfo
+                .GetCustomAttributes(
+                    typeof(DisplayNameAttribute),
+                    false)
+                .FirstOrDefault() as DisplayNameAttribute;
+
+        var displayName =
+            displayNameAttribute?.DisplayName
+            ?? propertyInfo.Name;
+        
+        var isReadOnly = !propertyInfo.CanWrite;
+
+        return new()
+        {
+            Id = propertyInfo.Name,
+            DisplayName = displayName,
+            IsReadOnly = isReadOnly
+        };
+    }
+}
 
 public partial class Form
 {

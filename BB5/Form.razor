@@ -7,18 +7,7 @@
     @foreach (var property in Object?.GetType().GetProperties()
                               ?? Enumerable.Empty<PropertyInfo>())
     {
-        var displayNameAttribute =
-            property
-                .GetCustomAttributes(
-                    typeof(DisplayNameAttribute),
-                    false)
-                .FirstOrDefault() as DisplayNameAttribute;
-
-        var displayName =
-            displayNameAttribute?.DisplayName
-            ?? property.Name;
-
-        var id = property.Name;
+        var controlInfo = FormControlInfo.From(property);
 
         <div class="mb-3">
             @if (property.PropertyType.IsEnum)
@@ -26,7 +15,7 @@
                 var propertyValue = property.GetValue(Object);
 
                 <div class="mb-3">
-                    <InputLabel Content="@displayName" />
+                    <InputLabel Content="@controlInfo.DisplayName" />
                     <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
                             Items="@(Enum.GetNames(property.PropertyType))"
                             ValueChanged="@(async value =>
@@ -34,8 +23,8 @@
                                               property.SetValue(Object, Enum.Parse(property.PropertyType, value));
                                               await OnModified.InvokeAsync();
                                           })" />
-                    <Feedback Content="@GetValidationFeedback(id)"
-                              ValidationState="@GetValidationState(id)" />
+                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
+                              ValidationState="@GetValidationState(controlInfo.Id)" />
                 </div>
             }
             
@@ -50,9 +39,9 @@
                                                          property.SetValue(Object, value);
                                                          await OnModified.InvokeAsync();
                                                      })"/>
-                    <InputCheckLabel Content="@displayName"/>
-                    <Feedback Content="@GetValidationFeedback(id)"
-                              ValidationState="@GetValidationState(id)" />
+                    <InputCheckLabel Content="@controlInfo.DisplayName"/>
+                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
+                              ValidationState="@GetValidationState(controlInfo.Id)" />
                 </div>
             }
             
@@ -66,11 +55,9 @@
                         intValue,
                         CultureInfo.InvariantCulture);
 
-                var readOnly = !property.CanWrite;
-                
-                <InputLabel Content="@displayName" />
+                <InputLabel Content="@controlInfo.DisplayName" />
             
-                @if (readOnly)
+                @if (controlInfo.IsReadOnly)
                 {
                     <InputText Value="@valueText"
                                Readonly="@true" />
@@ -78,7 +65,7 @@
                 else
                 {
                     <InputText Value="@valueText"
-                               ValidationState="@GetValidationState(id)"
+                               ValidationState="@GetValidationState(controlInfo.Id)"
                                ValueChanged="@(async value =>
                                              {
                                                  if (!int.TryParse(
@@ -96,8 +83,8 @@
                                                  await OnModified.InvokeAsync();
                                              })"/>
 
-                    <Feedback Content="@GetValidationFeedback(id)"
-                              ValidationState="@GetValidationState(id)" />
+                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
+                              ValidationState="@GetValidationState(controlInfo.Id)" />
                 }
             }
 
@@ -111,11 +98,9 @@
                         intValue,
                         CultureInfo.InvariantCulture);
 
-                var readOnly = !property.CanWrite;
-                
-                <InputLabel Content="@displayName" />
+                <InputLabel Content="@controlInfo.DisplayName" />
             
-                @if (readOnly)
+                @if (controlInfo.IsReadOnly)
                 {
                     <InputText Value="@valueText"
                                Readonly="@true" />
@@ -123,7 +108,7 @@
                 else
                 {
                     <InputText Value="@valueText"
-                               ValidationState="@GetValidationState(id)"
+                               ValidationState="@GetValidationState(controlInfo.Id)"
                                ValueChanged="@(async value =>
                                              {
                                                  if (!decimal.TryParse(
@@ -141,19 +126,18 @@
                                                  await OnModified.InvokeAsync();
                                              })"/>
 
-                    <Feedback Content="@GetValidationFeedback(id)"
-                              ValidationState="@GetValidationState(id)" />
+                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
+                              ValidationState="@GetValidationState(controlInfo.Id)" />
                 }
             }
 
             @if (typeof(string) == property.PropertyType)
             {
                 var valueText = property.GetValue(Object)?.ToString() ?? "";
-                var readOnly = !property.CanWrite;
                 
-                <InputLabel Content="@displayName" />
+                <InputLabel Content="@controlInfo.DisplayName" />
             
-                @if (readOnly)
+                @if (controlInfo.IsReadOnly)
                 {
                     <InputText Value="@valueText"
                                Readonly="@true" />
@@ -169,7 +153,7 @@
                     
                     if (isPassword)
                     {
-                        <InputPassword ValidationState="@GetValidationState(id)"
+                        <InputPassword ValidationState="@GetValidationState(controlInfo.Id)"
                                        ValueChanged="@(async value =>
                                                      {
                                                          property.SetValue(Object, value);
@@ -179,7 +163,7 @@
                     else
                     {
                         <InputText Value="@valueText"
-                                   ValidationState="@GetValidationState(id)"
+                                   ValidationState="@GetValidationState(controlInfo.Id)"
                                    ValueChanged="@(async value =>
                                                  {
                                                      property.SetValue(Object, value);
@@ -187,8 +171,8 @@
                                                  })"/>
                     }
 
-                    <Feedback Content="@GetValidationFeedback(id)"
-                              ValidationState="@GetValidationState(id)" />
+                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
+                              ValidationState="@GetValidationState(controlInfo.Id)" />
                 }
             }
         </div>
