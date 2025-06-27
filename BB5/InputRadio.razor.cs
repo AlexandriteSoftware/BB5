@@ -58,7 +58,7 @@ public partial class InputRadio
         {
             classes.AddRange(
                 Class.Split(
-                    ',',
+                    ' ',
                     StringSplitOptions.RemoveEmptyEntries));
         }
 

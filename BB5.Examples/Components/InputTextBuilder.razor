@@ -2,26 +2,15 @@
 
 <div class="row">
     <div class="col-4">
-        <div class="mb-3">
-            <InputLabel Content="@("Size")" />
-            <Select Value="@(Enum.GetName(Size))"
-                    Items="@(Enum.GetNames<ComponentSize>())"
-                    ValueChanged="SizeUpdated" />
-        </div>
-        <div class="mb-3">
-            <BB5.InputCheckbox Id="builder-input-text-readonly"
-                               Value="@ReadOnly"
-                               ValueChanged="ReadOnlyUpdated" />
-            <InputCheckLabel For="builder-alert-dismissible"
-                             Content="@("Read-only")" />
-        </div>
-        <ClassBuilder OnClassUpdated="HandleStyleUpdate" />
+        <Form Object="Properties"
+              OnModified="@(() => StateHasChanged())" />
+        <ClassBuilder OnClassUpdated="HandleStyleUpdate"/>
     </div>
     <div class="col-8">
         <div class="m-3">
-            <BB5.InputText Size="@InputTextSize"
+            <BB5.InputText Size="@Properties.Size"
                            Class="@InputTextClass"
-                           ReadOnly="InputTextReadOnly" />
+                           ReadOnly="@Properties.ReadOnly" />
         </div>
     </div>
 </div>

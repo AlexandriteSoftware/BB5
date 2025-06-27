@@ -93,7 +93,7 @@ public partial class Select
         {
             classes.AddRange(
                 Class.Split(
-                    ',',
+                    ' ',
                     StringSplitOptions.RemoveEmptyEntries));
         }
 

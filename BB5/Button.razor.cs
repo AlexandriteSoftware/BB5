@@ -114,7 +114,7 @@ public partial class Button
         {
             classes.AddRange(
                 Class.Split(
-                    ',',
+                    ' ',
                     StringSplitOptions.RemoveEmptyEntries));
         }
 

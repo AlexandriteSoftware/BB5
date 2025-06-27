@@ -6,3 +6,8 @@
             Items="@(Enum.GetNames<Shadow>())"
             ValueChanged="ShadowUpdatedAsync" />
 </div>
+
+<div class="mb-3">
+    <InputLabel Content="@("Class")" />
+    <BB5.InputText ValueChanged="ClassUpdatedAsync" />
+</div>

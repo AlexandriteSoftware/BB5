@@ -71,7 +71,7 @@ public partial class InputPassword
         {
             classes.AddRange(
                 Class.Split(
-                    ',',
+                    ' ',
                     StringSplitOptions.RemoveEmptyEntries));
         }
 

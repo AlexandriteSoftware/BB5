@@ -89,7 +89,7 @@ public partial class Alert
         {
             classes.AddRange(
                 Class.Split(
-                    ',',
+                    ' ',
                     StringSplitOptions.RemoveEmptyEntries));
         }
 

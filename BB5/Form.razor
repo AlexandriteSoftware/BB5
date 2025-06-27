@@ -2,7 +2,8 @@
 @using System.Globalization
 @using System.Reflection
 
-<form @onsubmit="HandleSubmit">
+<form @onsubmit="HandleSubmit"
+      @attributes="@Attributes">
     @foreach (var property in Object?.GetType().GetProperties()
                               ?? Enumerable.Empty<PropertyInfo>())
     {

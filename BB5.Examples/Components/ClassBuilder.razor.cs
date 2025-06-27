@@ -11,6 +11,8 @@ public partial class ClassBuilder
         Shadow.None;
 
     private Shadow SelectedShadow { get; set; }
+    
+    private string Class { get; set; } = "";
 
     protected override void OnInitialized()
     {
@@ -19,6 +21,13 @@ public partial class ClassBuilder
         SelectedShadow = Shadow;
     }
 
+    public async Task ClassUpdatedAsync(
+        string value)
+    {
+        Class = value;
+        await UpdateClassAsync();
+    }
+    
     private async Task ShadowUpdatedAsync(
         string value)
     {
@@ -40,6 +49,14 @@ public partial class ClassBuilder
                     _ => ""
                 }
             };
+
+        if (!string.IsNullOrEmpty(Class))
+        {
+            classes.AddRange(
+                Class.Split(
+                    ' ',
+                    StringSplitOptions.RemoveEmptyEntries));
+        }
 
         await OnClassUpdated.InvokeAsync(
             string.Join(
