@@ -11,7 +11,10 @@
             <Button Variant="@Properties.Variant"
                     Class="@ButtonClass"
                     Outline="@Properties.Outline"
-                    Content="@Properties.Content" />
+                    Content="@(
+                             Properties.ContentIsMarkup
+                                 ? (MarkupString)Properties.Content
+                                 : Properties.Content)" />
         </div>
     </div>
 </div>

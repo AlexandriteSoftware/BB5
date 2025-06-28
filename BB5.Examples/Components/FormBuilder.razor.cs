@@ -1,13 +1,36 @@
-﻿namespace BB5.Examples.Components;
+﻿using System.ComponentModel;
 
-public class FormBuilderItem(
-    string id)
+namespace BB5.Examples.Components;
+
+public class FormBuilderItem
 {
-    public string Id { get; } = id;
+    public string String { get; set; } = "";
     
-    public string Key { get; set; } = "";
+    [MultilineText]
+    public string Text { get; set; } = "";
 
-    public string Value { get; set; } = "";
+    [DisplayName("String (optional)")]
+    public string? NullableString { get; set; }
+    
+    public DateOnly Date { get; set; }
+    
+    [DisplayName("Date (optional)")]
+    public DateOnly? NullableDate { get; set; }
+
+    public int Integer { get; set; }
+    
+    [DisplayName("Integer (optional)")]
+    public int? NullableInteger { get; set; }
+    
+    public decimal Decimal { get; set; }
+    
+    [DisplayName("Decimal (optional)")]
+    public decimal? NullableDecimal { get; set; }
+    
+    public bool Boolean { get; set; }
+    
+    [DisplayName("Boolean (optional)")]
+    public bool? NullableBoolean { get; set; }
 }
 
 public class FormProperties;
@@ -19,10 +42,9 @@ public partial class FormBuilder
     private string? FormClass { get; set; } = "";
 
     private object? FormItem { get; set; } =
-        new FormBuilderItem("1")
+        new FormBuilderItem
         {
-            Key = "Item 1",
-            Value = "Description for Item 1"
+            Date = DateOnly.FromDateTime(DateTime.Today)
         };
 
     protected override void OnInitialized()

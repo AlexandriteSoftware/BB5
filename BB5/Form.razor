@@ -1,183 +1,211 @@
-﻿@using System.ComponentModel
-@using System.Globalization
-@using System.Reflection
+﻿@using System.Globalization
 
 <form @onsubmit="HandleSubmit"
       @attributes="@Attributes">
-    @foreach (var property in Object?.GetType().GetProperties()
-                              ?? Enumerable.Empty<PropertyInfo>())
+    @foreach (var controlInfo in FormControls)
     {
-        var controlInfo = FormControlInfo.From(property);
+        var property = controlInfo.PropertyInfo;
+        var @object = controlInfo.Object; 
 
         <div class="mb-3">
+            @if (controlInfo.HasLabel)
+            {
+                <InputLabel Content="@controlInfo.DisplayName"/>
+            }
+
             @if (property.PropertyType.IsEnum)
             {
-                var propertyValue = property.GetValue(Object);
+                var propertyValue = property.GetValue(@object);
 
-                <div class="mb-3">
-                    <InputLabel Content="@controlInfo.DisplayName" />
-                    <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
-                            Items="@(Enum.GetNames(property.PropertyType))"
-                            ValueChanged="@(async value =>
-                                          {
-                                              property.SetValue(Object, Enum.Parse(property.PropertyType, value));
-                                              await OnModified.InvokeAsync();
-                                          })" />
-                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
-                              ValidationState="@GetValidationState(controlInfo.Id)" />
-                </div>
+                <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
+                        Items="@(Enum.GetNames(property.PropertyType))"
+                        ValueChanged="@controlInfo.SetValueAsync" />
             }
-            
+
             @if (typeof(bool) == property.PropertyType)
             {
                 var propertyValue = property.GetValue(Object) is true;
 
-                <div class="mb-3">
-                    <BB5.InputCheckbox Value="@propertyValue"
-                                       ValueChanged="@(async value =>
-                                                     {
-                                                         property.SetValue(Object, value);
-                                                         await OnModified.InvokeAsync();
-                                                     })"/>
-                    <InputCheckLabel Content="@controlInfo.DisplayName"/>
-                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
-                              ValidationState="@GetValidationState(controlInfo.Id)" />
-                </div>
+                <BB5.InputCheckbox Value="@propertyValue"
+                                   ValueChanged="@(async value =>
+                                                 {
+                                                     property.SetValue(Object, value);
+                                                     await OnModified.InvokeAsync();
+                                                 })"/>
+                <InputCheckLabel Content="@controlInfo.DisplayName"/>
             }
-            
+
             @if (typeof(int) == property.PropertyType)
             {
                 var intValue =
-                    (int)(property.GetValue(Object) ?? 0);
+                    (int)property.GetValue(Object)!;
 
                 var valueText =
                     Convert.ToString(
                         intValue,
                         CultureInfo.InvariantCulture);
 
-                <InputLabel Content="@controlInfo.DisplayName" />
-            
                 @if (controlInfo.IsReadOnly)
                 {
                     <InputText Value="@valueText"
-                               Readonly="@true" />
+                               Readonly="@true"/>
                 }
                 else
                 {
                     <InputText Value="@valueText"
-                               ValidationState="@GetValidationState(controlInfo.Id)"
-                               ValueChanged="@(async value =>
-                                             {
-                                                 if (!int.TryParse(
-                                                        value,
-                                                        CultureInfo.InvariantCulture,
-                                                        out var typeValue))
-                                                 {
-                                                     return;
-                                                 }
+                               ValidationState="@controlInfo.ValidationState"
+                               ValueChanged="@controlInfo.SetValueAsync" />
+                }
+            }
+            
+            @if (typeof(int?) == property.PropertyType)
+            {
+                var intValue =
+                    (int?)property.GetValue(Object);
 
-                                                 property.SetValue(
-                                                     Object,
-                                                     typeValue);
+                var valueText =
+                    intValue == null
+                        ? ""
+                        : Convert.ToString(
+                            intValue,
+                            CultureInfo.InvariantCulture);
 
-                                                 await OnModified.InvokeAsync();
-                                             })"/>
-
-                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
-                              ValidationState="@GetValidationState(controlInfo.Id)" />
+                @if (controlInfo.IsReadOnly)
+                {
+                    <InputText Value="@valueText"
+                               Readonly="@true"/>
+                }
+                else
+                {
+                    <InputText Value="@valueText"
+                               ValidationState="@controlInfo.ValidationState"
+                               ValueChanged="@controlInfo.SetValueAsync" />
                 }
             }
 
+
             @if (typeof(decimal) == property.PropertyType)
             {
-                var intValue =
+                var decimalValue =
                     (decimal)(property.GetValue(Object) ?? 0);
 
                 var valueText =
                     Convert.ToString(
-                        intValue,
+                        decimalValue,
                         CultureInfo.InvariantCulture);
 
-                <InputLabel Content="@controlInfo.DisplayName" />
-            
                 @if (controlInfo.IsReadOnly)
                 {
                     <InputText Value="@valueText"
-                               Readonly="@true" />
+                               Readonly="@true"/>
                 }
                 else
                 {
                     <InputText Value="@valueText"
-                               ValidationState="@GetValidationState(controlInfo.Id)"
-                               ValueChanged="@(async value =>
-                                             {
-                                                 if (!decimal.TryParse(
-                                                         value,
-                                                         CultureInfo.InvariantCulture,
-                                                         out var typeValue))
-                                                 {
-                                                     return;
-                                                 }
+                               ValidationState="@controlInfo.ValidationState"
+                               ValueChanged="@controlInfo.SetValueAsync" />
+                }
+            }
+            
+            @if (typeof(decimal?) == property.PropertyType)
+            {
+                var decimalValue =
+                    (decimal?)property.GetValue(Object);
 
-                                                 property.SetValue(
-                                                     Object,
-                                                     typeValue);
+                var valueText =
+                    decimalValue == null
+                        ? ""
+                        : Convert.ToString(
+                            decimalValue,
+                            CultureInfo.InvariantCulture);
 
-                                                 await OnModified.InvokeAsync();
-                                             })"/>
-
-                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
-                              ValidationState="@GetValidationState(controlInfo.Id)" />
+                @if (controlInfo.IsReadOnly)
+                {
+                    <InputText Value="@valueText"
+                               Readonly="@true"/>
+                }
+                else
+                {
+                    <InputText Value="@valueText"
+                               ValidationState="@controlInfo.ValidationState"
+                               ValueChanged="@controlInfo.SetValueAsync" />
                 }
             }
 
             @if (typeof(string) == property.PropertyType)
             {
                 var valueText = property.GetValue(Object)?.ToString() ?? "";
-                
-                <InputLabel Content="@controlInfo.DisplayName" />
-            
+
                 @if (controlInfo.IsReadOnly)
                 {
                     <InputText Value="@valueText"
+                               Rows="@(controlInfo.IsMultilineText ? 3 : 1)"
                                Readonly="@true" />
                 }
                 else
                 {
-                    var isPassword =
-                        property
-                            .GetCustomAttributes(
-                                typeof(PasswordPropertyTextAttribute),
-                                false)
-                            .Any();
-                    
-                    if (isPassword)
+                    if (controlInfo.IsPassword)
                     {
-                        <InputPassword ValidationState="@GetValidationState(controlInfo.Id)"
-                                       ValueChanged="@(async value =>
-                                                     {
-                                                         property.SetValue(Object, value);
-                                                         await OnModified.InvokeAsync();
-                                                     })" />
+                        <InputPassword ValidationState="@controlInfo.ValidationState"
+                                       ValueChanged="@controlInfo.SetValueAsync" />
                     }
                     else
                     {
                         <InputText Value="@valueText"
-                                   ValidationState="@GetValidationState(controlInfo.Id)"
-                                   ValueChanged="@(async value =>
-                                                 {
-                                                     property.SetValue(Object, value);
-                                                     await OnModified.InvokeAsync();
-                                                 })"/>
+                                   Rows="@(controlInfo.IsMultilineText ? 3 : 1)"
+                                   ValidationState="@controlInfo.ValidationState"
+                                   ValueChanged="@controlInfo.SetValueAsync" />
                     }
-
-                    <Feedback Content="@GetValidationFeedback(controlInfo.Id)"
-                              ValidationState="@GetValidationState(controlInfo.Id)" />
                 }
+            }
+            
+            @if (typeof(DateOnly) == property.PropertyType)
+            {
+                var valueText = property.GetValue(Object) is DateOnly dateOnly
+                    ? dateOnly.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+                    : "";
+
+                @if (controlInfo.IsReadOnly)
+                {
+                    <InputText Value="@valueText"
+                               Readonly="@true"/>
+                }
+                else
+                {
+                    <InputDate Value="@valueText"
+                               ValidationState="@controlInfo.ValidationState"
+                               ValueChanged="@controlInfo.SetValueAsync" />
+                }
+            }
+
+            @if (typeof(DateOnly?) == property.PropertyType)
+            {
+                var valueText =
+                    property.GetValue(Object) is DateOnly dateOnlyValue
+                        ? dateOnlyValue.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+                        : "";
+
+                @if (controlInfo.IsReadOnly)
+                {
+                    <InputText Value="@valueText"
+                               Readonly="@true"/>
+                }
+                else
+                {
+                    <InputDate Value="@valueText"
+                               ValidationState="@controlInfo.ValidationState"
+                               ValueChanged="@controlInfo.SetValueAsync" />
+                }
+            }
+
+            @if (controlInfo.HasFeedback)
+            {
+                <Feedback Content="@controlInfo.ValidationFeedback"
+                          ValidationState="@controlInfo.ValidationState"/>
             }
         </div>
     }
-    
+
     @Controls
 
     @Actions
