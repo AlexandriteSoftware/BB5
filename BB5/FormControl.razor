@@ -1,0 +1,202 @@
+﻿@using System.Globalization
+@{
+    var controlInfo = Model;
+    var property = controlInfo.PropertyInfo;
+    var @object = controlInfo.Object;
+}
+
+@if (controlInfo.HasLabel)
+{
+    <InputLabel Content="@controlInfo.DisplayName"/>
+}
+
+@if (property.PropertyType.IsEnum)
+{
+    var propertyValue = property.GetValue(@object);
+
+    <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
+            Items="@(Enum.GetNames(property.PropertyType))"
+            ValueChanged="@controlInfo.SetValueAsync" />
+}
+
+@if (typeof(bool) == property.PropertyType)
+{
+    var propertyValue = property.GetValue(@object) is true;
+
+    <BB5.InputCheckbox Value="@propertyValue"
+                       ValueChanged="@(async value =>
+                                     {
+                                         property.SetValue(@object, value);
+                                         await OnModified.InvokeAsync();
+                                     })"/>
+    <InputCheckLabel Content="@controlInfo.DisplayName"/>
+}
+
+@if (typeof(int) == property.PropertyType)
+{
+    var intValue =
+        (int)property.GetValue(@object)!;
+
+    var valueText =
+        Convert.ToString(
+            intValue,
+            CultureInfo.InvariantCulture);
+
+    @if (controlInfo.IsReadOnly)
+    {
+        <InputText Value="@valueText"
+                   Readonly="@true"/>
+    }
+    else
+    {
+        <InputText Value="@valueText"
+                   ValidationState="@controlInfo.ValidationState"
+                   ValueChanged="@controlInfo.SetValueAsync" />
+    }
+}
+
+@if (typeof(int?) == property.PropertyType)
+{
+    var intValue =
+        (int?)property.GetValue(@object);
+
+    var valueText =
+        intValue == null
+            ? ""
+            : Convert.ToString(
+                intValue,
+                CultureInfo.InvariantCulture);
+
+    @if (controlInfo.IsReadOnly)
+    {
+        <InputText Value="@valueText"
+                   Readonly="@true"/>
+    }
+    else
+    {
+        <InputText Value="@valueText"
+                   ValidationState="@controlInfo.ValidationState"
+                   ValueChanged="@controlInfo.SetValueAsync" />
+    }
+}
+
+
+@if (typeof(decimal) == property.PropertyType)
+{
+    var decimalValue =
+        (decimal)(property.GetValue(@object) ?? 0);
+
+    var valueText =
+        Convert.ToString(
+            decimalValue,
+            CultureInfo.InvariantCulture);
+
+    @if (controlInfo.IsReadOnly)
+    {
+        <InputText Value="@valueText"
+                   Readonly="@true"/>
+    }
+    else
+    {
+        <InputText Value="@valueText"
+                   ValidationState="@controlInfo.ValidationState"
+                   ValueChanged="@controlInfo.SetValueAsync" />
+    }
+}
+
+@if (typeof(decimal?) == property.PropertyType)
+{
+    var decimalValue =
+        (decimal?)property.GetValue(@object);
+
+    var valueText =
+        decimalValue == null
+            ? ""
+            : Convert.ToString(
+                decimalValue,
+                CultureInfo.InvariantCulture);
+
+    @if (controlInfo.IsReadOnly)
+    {
+        <InputText Value="@valueText"
+                   Readonly="@true"/>
+    }
+    else
+    {
+        <InputText Value="@valueText"
+                   ValidationState="@controlInfo.ValidationState"
+                   ValueChanged="@controlInfo.SetValueAsync" />
+    }
+}
+
+@if (typeof(string) == property.PropertyType)
+{
+    var valueText = property.GetValue(@object)?.ToString() ?? "";
+
+    @if (controlInfo.IsReadOnly)
+    {
+        <InputText Value="@valueText"
+                   Rows="@(controlInfo.IsMultilineText ? 3 : 1)"
+                   Readonly="@true" />
+    }
+    else
+    {
+        if (controlInfo.IsPassword)
+        {
+            <InputPassword ValidationState="@controlInfo.ValidationState"
+                           ValueChanged="@controlInfo.SetValueAsync" />
+        }
+        else
+        {
+            <InputText Value="@valueText"
+                       Rows="@(controlInfo.IsMultilineText ? 3 : 1)"
+                       ValidationState="@controlInfo.ValidationState"
+                       ValueChanged="@controlInfo.SetValueAsync" />
+        }
+    }
+}
+
+@if (typeof(DateOnly) == property.PropertyType)
+{
+    var valueText = property.GetValue(@object) is DateOnly dateOnly
+        ? dateOnly.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+        : "";
+
+    @if (controlInfo.IsReadOnly)
+    {
+        <InputText Value="@valueText"
+                   Readonly="@true"/>
+    }
+    else
+    {
+        <InputDate Value="@valueText"
+                   ValidationState="@controlInfo.ValidationState"
+                   ValueChanged="@controlInfo.SetValueAsync" />
+    }
+}
+
+@if (typeof(DateOnly?) == property.PropertyType)
+{
+    var valueText =
+        property.GetValue(@object) is DateOnly dateOnlyValue
+            ? dateOnlyValue.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+            : "";
+
+    @if (controlInfo.IsReadOnly)
+    {
+        <InputText Value="@valueText"
+                   Readonly="@true"/>
+    }
+    else
+    {
+        <InputDate Value="@valueText"
+                   ValidationState="@controlInfo.ValidationState"
+                   ValueChanged="@controlInfo.SetValueAsync" />
+    }
+}
+
+@if (controlInfo.HasFeedback)
+{
+    <Feedback Content="@controlInfo.ValidationFeedback"
+              ValidationState="@controlInfo.ValidationState"/>
+}

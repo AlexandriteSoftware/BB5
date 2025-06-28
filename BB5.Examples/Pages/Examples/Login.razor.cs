@@ -23,4 +23,20 @@ public partial class Login
     {
         Message = "Login successful for user: " + LoginModel.User;
     }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        Login2Model = new LoginModel();
+        Login2 = FormControlModel.From(Login2Model);
+    }
+
+    private LoginModel? Login2Model { get; set; }
+    private IList<FormControlModel>? Login2 { get; set; }
+    
+    private void HandleLogin2()
+    {
+        Message = "Login successful for user: " + Login2Model!.User;
+    }
 }
