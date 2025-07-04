@@ -1,13 +1,16 @@
 ﻿@using System.Globalization
 @{
-    var controlInfo = Model;
-    var property = controlInfo.PropertyInfo;
-    var @object = controlInfo.Object;
+    if (Model is not { } model)
+        return;
+
+    var property = model.PropertyInfo;
+    var @object = model.Object;
 }
 
-@if (controlInfo.HasLabel)
+@if (model.HasLabel)
 {
-    <InputLabel Content="@controlInfo.DisplayName"/>
+    <InputLabel Content="@model.DisplayName"
+                For="@model.Id" />
 }
 
 @if (property.PropertyType.IsEnum)
@@ -16,20 +19,23 @@
 
     <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
             Items="@(Enum.GetNames(property.PropertyType))"
-            ValueChanged="@controlInfo.SetValueAsync" />
+            ValueChanged="@model.SetValueAsync"
+            Id="@model.Id" />
 }
 
 @if (typeof(bool) == property.PropertyType)
 {
     var propertyValue = property.GetValue(@object) is true;
 
-    <BB5.InputCheckbox Value="@propertyValue"
+    <BB5.InputCheckbox Id="@model.Id"
+                       Value="@propertyValue"
                        ValueChanged="@(async value =>
                                      {
                                          property.SetValue(@object, value);
                                          await OnModified.InvokeAsync();
                                      })"/>
-    <InputCheckLabel Content="@controlInfo.DisplayName"/>
+    <InputCheckLabel Content="@model.DisplayName"
+                     For="@model.Id" />
 }
 
 @if (typeof(int) == property.PropertyType)
@@ -42,16 +48,18 @@
             intValue,
             CultureInfo.InvariantCulture);
 
-    @if (controlInfo.IsReadOnly)
+    @if (model.IsReadOnly)
     {
-        <InputText Value="@valueText"
+        <InputText Id="@model.Id"
+                   Value="@valueText"
                    Readonly="@true"/>
     }
     else
     {
-        <InputText Value="@valueText"
-                   ValidationState="@controlInfo.ValidationState"
-                   ValueChanged="@controlInfo.SetValueAsync" />
+        <InputText Id="@model.Id"
+                   Value="@valueText"
+                   ValidationState="@model.ValidationState"
+                   ValueChanged="@model.SetValueAsync" />
     }
 }
 
@@ -67,16 +75,18 @@
                 intValue,
                 CultureInfo.InvariantCulture);
 
-    @if (controlInfo.IsReadOnly)
+    @if (model.IsReadOnly)
     {
-        <InputText Value="@valueText"
+        <InputText Id="@model.Id"
+                   Value="@valueText"
                    Readonly="@true"/>
     }
     else
     {
-        <InputText Value="@valueText"
-                   ValidationState="@controlInfo.ValidationState"
-                   ValueChanged="@controlInfo.SetValueAsync" />
+        <InputText Id="@model.Id"
+                   Value="@valueText"
+                   ValidationState="@model.ValidationState"
+                   ValueChanged="@model.SetValueAsync" />
     }
 }
 
@@ -91,16 +101,18 @@
             decimalValue,
             CultureInfo.InvariantCulture);
 
-    @if (controlInfo.IsReadOnly)
+    @if (model.IsReadOnly)
     {
-        <InputText Value="@valueText"
+        <InputText Id="@model.Id"
+                   Value="@valueText"
                    Readonly="@true"/>
     }
     else
     {
-        <InputText Value="@valueText"
-                   ValidationState="@controlInfo.ValidationState"
-                   ValueChanged="@controlInfo.SetValueAsync" />
+        <InputText Id="@model.Id"
+                   Value="@valueText"
+                   ValidationState="@model.ValidationState"
+                   ValueChanged="@model.SetValueAsync" />
     }
 }
 
@@ -116,16 +128,18 @@
                 decimalValue,
                 CultureInfo.InvariantCulture);
 
-    @if (controlInfo.IsReadOnly)
+    @if (model.IsReadOnly)
     {
-        <InputText Value="@valueText"
+        <InputText Id="@model.Id"
+                   Value="@valueText"
                    Readonly="@true"/>
     }
     else
     {
-        <InputText Value="@valueText"
-                   ValidationState="@controlInfo.ValidationState"
-                   ValueChanged="@controlInfo.SetValueAsync" />
+        <InputText Id="@model.Id"
+                   Value="@valueText"
+                   ValidationState="@model.ValidationState"
+                   ValueChanged="@model.SetValueAsync" />
     }
 }
 
@@ -133,25 +147,28 @@
 {
     var valueText = property.GetValue(@object)?.ToString() ?? "";
 
-    @if (controlInfo.IsReadOnly)
+    @if (model.IsReadOnly)
     {
-        <InputText Value="@valueText"
-                   Rows="@(controlInfo.IsMultilineText ? 3 : 1)"
+        <InputText Id="@model.Id"
+                   Value="@valueText"
+                   Rows="@(model.IsMultilineText ? 3 : 1)"
                    Readonly="@true" />
     }
     else
     {
-        if (controlInfo.IsPassword)
+        if (model.IsPassword)
         {
-            <InputPassword ValidationState="@controlInfo.ValidationState"
-                           ValueChanged="@controlInfo.SetValueAsync" />
+            <InputPassword Id="@model.Id"
+                           ValidationState="@model.ValidationState"
+                           ValueChanged="@model.SetValueAsync" />
         }
         else
         {
-            <InputText Value="@valueText"
-                       Rows="@(controlInfo.IsMultilineText ? 3 : 1)"
-                       ValidationState="@controlInfo.ValidationState"
-                       ValueChanged="@controlInfo.SetValueAsync" />
+            <InputText Id="@model.Id"
+                       Value="@valueText"
+                       Rows="@(model.IsMultilineText ? 3 : 1)"
+                       ValidationState="@model.ValidationState"
+                       ValueChanged="@model.SetValueAsync" />
         }
     }
 }
@@ -162,16 +179,18 @@
         ? dateOnly.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
         : "";
 
-    @if (controlInfo.IsReadOnly)
+    @if (model.IsReadOnly)
     {
-        <InputText Value="@valueText"
+        <InputText Id="@model.Id"
+                   Value="@valueText"
                    Readonly="@true"/>
     }
     else
     {
-        <InputDate Value="@valueText"
-                   ValidationState="@controlInfo.ValidationState"
-                   ValueChanged="@controlInfo.SetValueAsync" />
+        <InputDate Id="@model.Id"
+                   Value="@valueText"
+                   ValidationState="@model.ValidationState"
+                   ValueChanged="@model.SetValueAsync" />
     }
 }
 
@@ -182,21 +201,23 @@
             ? dateOnlyValue.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
             : "";
 
-    @if (controlInfo.IsReadOnly)
+    @if (model.IsReadOnly)
     {
-        <InputText Value="@valueText"
+        <InputText Id="@model.Id"
+                   Value="@valueText"
                    Readonly="@true"/>
     }
     else
     {
-        <InputDate Value="@valueText"
-                   ValidationState="@controlInfo.ValidationState"
-                   ValueChanged="@controlInfo.SetValueAsync" />
+        <InputDate Id="@model.Id"
+                   Value="@valueText"
+                   ValidationState="@model.ValidationState"
+                   ValueChanged="@model.SetValueAsync" />
     }
 }
 
-@if (controlInfo.HasFeedback)
+@if (model.HasFeedback)
 {
-    <Feedback Content="@controlInfo.ValidationFeedback"
-              ValidationState="@controlInfo.ValidationState"/>
+    <Feedback Content="@model.ValidationFeedback"
+              ValidationState="@model.ValidationState"/>
 }

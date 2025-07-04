@@ -12,6 +12,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BB5.Examples", "BB5.Examples\BB5.Examples.csproj", "{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Guides", "Guides", "{6DE3A524-A9F8-4287-81D4-5AC60844C218}"
+	ProjectSection(SolutionItems) = preProject
+		Guides\Form.md = Guides\Form.md
+		Guides\InputText.md = Guides\InputText.md
+		Guides\FormControl.md = Guides\FormControl.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

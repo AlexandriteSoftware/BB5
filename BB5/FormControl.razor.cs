@@ -87,7 +87,7 @@ public class FormControlModel
                     typeof(PasswordPropertyTextAttribute),
                     false)
                 .Any();
-
+        
         var propertyType =
             propertyInfo.PropertyType;
         

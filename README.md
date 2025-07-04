@@ -72,7 +72,9 @@ dashboards, and any Blazor project where delivery speed matters.
 
 ## 📚 Docs & Demos
 
-Coming soon. For now, check out the samples folder and get started fast.
+Explore the [documentation](./BB5.Docs/Overview.md) for detailed guides.
+
+Check out the samples folder to get started fast.
 
 ## 🧪 Still Evolving
 
