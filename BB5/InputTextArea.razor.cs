@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace BB5;
 
-public partial class InputText
+public partial class InputTextArea
 {
     [Parameter]
     public string Value { get; set; } = "";
@@ -30,6 +30,9 @@ public partial class InputText
     
     [Parameter]
     public bool Disabled { get; set; }
+
+    [Parameter]
+    public int Rows { get; set; } = 1;
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
@@ -84,6 +87,11 @@ public partial class InputText
             Attributes["id"] = Id;
         else
             Attributes.Remove("id");
+        
+        if (Rows > 1)
+            Attributes["rows"] = Rows;
+        else
+            Attributes.Remove("rows");
         
         if (ReadOnly)
             Attributes["readonly"] = "readonly";

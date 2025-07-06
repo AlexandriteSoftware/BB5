@@ -149,10 +149,18 @@
 
     @if (model.IsReadOnly)
     {
-        <InputText Id="@model.Id"
-                   Value="@valueText"
-                   Rows="@(model.IsMultilineText ? 3 : 1)"
-                   Readonly="@true" />
+        if (model.IsMultilineText)
+        {
+            <InputTextArea Id="@model.Id"
+                           Value="@valueText"
+                           Readonly="@true" />
+        }
+        else
+        {
+            <InputText Id="@model.Id"
+                       Value="@valueText"
+                       Readonly="@true"/>
+        }
     }
     else
     {
@@ -164,11 +172,20 @@
         }
         else
         {
-            <InputText Id="@model.Id"
-                       Value="@valueText"
-                       Rows="@(model.IsMultilineText ? 3 : 1)"
-                       ValidationState="@model.ValidationState"
-                       ValueChanged="@model.SetValueAsync" />
+            if (model.IsMultilineText)
+            {
+                <InputTextArea Id="@model.Id"
+                               Value="@valueText"
+                               ValidationState="@model.ValidationState"
+                               ValueChanged="@model.SetValueAsync" />
+            }
+            else
+            {
+                <InputText Id="@model.Id"
+                           Value="@valueText"
+                           ValidationState="@model.ValidationState"
+                           ValueChanged="@model.SetValueAsync" />
+            }
         }
     }
 }

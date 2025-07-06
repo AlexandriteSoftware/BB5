@@ -11,12 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{FB3C4571
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BB5.Examples", "BB5.Examples\BB5.Examples.csproj", "{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Guides", "Guides", "{6DE3A524-A9F8-4287-81D4-5AC60844C218}"
-	ProjectSection(SolutionItems) = preProject
-		Guides\Form.md = Guides\Form.md
-		Guides\InputText.md = Guides\InputText.md
-		Guides\FormControl.md = Guides\FormControl.md
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BB5.Docs", "BB5.Docs\BB5.Docs.csproj", "{A7458ABF-9F17-4FF7-972A-D9934624CFC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,5 +27,9 @@ Global
 		{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAA53A4D-FD1E-4689-A167-FA45B8CEC857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7458ABF-9F17-4FF7-972A-D9934624CFC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7458ABF-9F17-4FF7-972A-D9934624CFC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7458ABF-9F17-4FF7-972A-D9934624CFC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7458ABF-9F17-4FF7-972A-D9934624CFC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

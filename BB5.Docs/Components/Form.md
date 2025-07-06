@@ -1,7 +1,5 @@
 # Form
 
-_[Back to Guides](../Overview.md)_
-
 Form component corresponds to HTML element `<form>`.
 
 When the Form's parameter `Object` is set, the form generates controls the object's properties.

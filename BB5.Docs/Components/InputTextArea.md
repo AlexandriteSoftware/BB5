@@ -1,15 +1,15 @@
-# InputText
+# InputTextArea
 
-InputText component provides a single-line text input. It renders either as `<input type="text" class="form-control">`.
+InputTextArea component provides a multi-line text input. It renders as `<textarea class="form-control" />`.
 
 ## Markup
 
 ```razor
-<InputText />
+<InputText Rows="3" />
 ```
 
 ```html
-<input type="text" class="form-control">
+<textarea class="form-control"></textarea>
 ```
 
 ## Parameters
@@ -31,6 +31,6 @@ Unmatched parameters will be added as HTML tag attributes.
 
 ## See also
 
-- [InputTextArea](InputTextArea.md)
+- [InputText](InputText.md)
 - [Form](Form.md)
 - [FormControl](FormControl.md)

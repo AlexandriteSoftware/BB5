@@ -1,7 +1,5 @@
 # Text input
 
-_[Back to Guides](../Overview.md)_
-
 Text input is a UI element that allows users to enter data in a form of text. It is most used input element, visually represented as a rectangular box with a cursor inside. The element can be single-line or multi-line.
 
 Text inputs are rarely used alone, they are usually part of a form, or form field, which is a collection of related elements, usually including a label, input, validation feedback, hint text, and other elements that help users understand what data is expected.

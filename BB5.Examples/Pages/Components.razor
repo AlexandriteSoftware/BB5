@@ -1,0 +1,36 @@
+﻿@page "/Components/{ComponentName}"
+
+@using BB5.Docs
+@using BB5.Examples.Layout
+@using Markdig
+
+@layout ArticleLayout
+
+@{
+    if (!Docs.TryGetComponentArticle(
+            ComponentName ?? "",
+            out var article))
+    {
+        <p>Component documentation not found.</p>
+        return;
+    }
+
+    var pipeline =
+        new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions()
+            .Build();
+
+    var documentationHtml =
+        string.IsNullOrEmpty(article)
+            ? (MarkupString)""
+            : (MarkupString)Markdown.ToHtml(
+                article,
+                pipeline);
+}
+
+@documentationHtml
+
+@code {
+    [Parameter]
+    public string? ComponentName { get; set; }
+}

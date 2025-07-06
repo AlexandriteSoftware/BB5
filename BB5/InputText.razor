@@ -1,14 +1,5 @@
 ﻿@namespace BB5
 
-@if (Rows == 1)
-{
-    <input value="@Value"
-           @oninput="HandleInputAsync"
-           @attributes="@Attributes">
-}
-else
-{
-    <textarea value="@Value"
-          @oninput="HandleInputAsync"
-          @attributes="@Attributes"></textarea>
-}
+<input value="@Value"
+       @oninput="HandleInputAsync"
+       @attributes="@Attributes">

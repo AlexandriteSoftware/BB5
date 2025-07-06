@@ -1,7 +1,5 @@
 # FormControl
 
-_[Back to Guides](../Overview.md)_
-
 FormControl is a component that generates a form control for a property of an object.
 
 ```razor
@@ -90,3 +88,9 @@ When the user's input is validated, two model's properties are updated:
 
 - `ValidationState` - `Normal`, `Invalid`, or `Valid`
 - `ValidationMessage` - `Feedback`'s control content. 
+
+## See also
+
+- [Form](Form.md)
+- [InputText](InputTextArea.md)
+- [InputTextArea](InputTextArea.md)

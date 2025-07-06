@@ -57,6 +57,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BB5.Docs\BB5.Docs.csproj" />
       <ProjectReference Include="..\BB5\BB5.csproj" />
     </ItemGroup>
 

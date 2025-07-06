@@ -1,0 +1,53 @@
+﻿@using BB5.Docs
+
+@{
+    var builders =
+        new[]
+            {
+                "Alert",
+                "Button",
+                "Form",
+                "InputLabel",
+                "InputDate",
+                "InputPassword",
+                "InputText",
+                "InputTextArea",
+                "Select",
+                "Table"
+            }
+            .OrderBy(
+                item => item,
+                StringComparer.Ordinal)
+            .ToList();
+}
+
+<div class="mt-3">
+    <p class="lead">Examples</p>
+    <div class="list-group list-group-flush">
+        <a href="/Examples/Login" class="list-group-item list-group-item-action">
+            Login
+        </a>
+    </div>
+</div>            
+<div class="mt-3">
+    <p class="lead">Builders</p>
+    <div class="list-group list-group-flush">
+        @foreach (var name in builders)
+        {
+            <a href="/Builders/@name" class="list-group-item list-group-item-action">
+                @name
+            </a>
+        }
+    </div>
+</div>
+<div class="mt-3">
+    <p class="lead">Components</p>
+    <div class="list-group list-group-flush">
+        @foreach (var name in Docs.GetComponentNames())
+        {
+            <a href="/Components/@name" class="list-group-item list-group-item-action">
+                @name
+            </a>
+        }
+    </div>
+</div>

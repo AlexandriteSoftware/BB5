@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
 namespace BB5;
@@ -14,25 +15,38 @@ public partial class InputCheckLabel
     [Parameter]
     public string For { get; set; } = "";
 
-    private string Classes { get; set; } = "";
-    private Dictionary<string, object> Attributes { get; } = [];
+    [Parameter]
+    public string Class { get; set; } = "";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Attributes { get; set; }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
         
-        var classList =
+        var classes =
             new List<string>
             {
                 "form-check-label"
             };
 
-        Classes =
-            string.Join(
-                " ",
-                classList);
+        if (!string.IsNullOrEmpty(Class))
+        {
+            classes.AddRange(
+                Class.Split(
+                    ' ',
+                    StringSplitOptions.RemoveEmptyEntries));
+        }
 
+        Attributes ??= [];
+        
         if (!string.IsNullOrEmpty(For))
             Attributes["for"] = For;
+
+        Attributes["class"] =
+            string.Join(
+                " ",
+                classes);
     }
 }

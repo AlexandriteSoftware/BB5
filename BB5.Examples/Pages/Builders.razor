@@ -1,0 +1,52 @@
+﻿@page "/Builders/{ComponentName}"
+
+@using BB5.Examples.Layout
+@using BB5.Examples.Components
+
+@layout ArticleLayout
+
+<h1>
+    @ComponentName
+</h1>
+
+@switch (ComponentName)
+{
+    case "Alert":
+        <AlertBuilder />
+        break;
+    case "Button":
+        <ButtonBuilder />
+        break;
+    case "Form":
+        <FormBuilder />
+        break;
+    case "InputDate":
+        <InputDateBuilder />
+        break;
+    case "InputLabel":
+        <InputLabelBuilder />
+        break;
+    case "InputPassword":
+        <InputPasswordBuilder />
+        break;
+    case "InputText":
+        <InputTextBuilder />
+        break;
+    case "InputTextArea":
+        <InputTextAreaBuilder />
+        break;
+    case "Select":
+        <SelectBuilder />
+        break;
+    case "Table":
+        <TableBuilder />
+        break;
+    default:
+        <p>Component builder not found.</p>;
+        break;
+}
+
+@code {
+    [Parameter]
+    public string? ComponentName { get; set; }
+}
