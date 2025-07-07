@@ -15,37 +15,45 @@ public class FormControlModel
     public string Id { get; init; } = "";
 
     public string DisplayName { get; init; } = "";
-    
+
     public bool IsReadOnly { get; init; }
 
     public bool IsPassword { get; init; }
 
     public bool IsRequired { get; init; }
-    
+
     public bool IsMultilineText { get; init; }
-    
+
     public string RequiredMessage { get; init; } = "";
-    
+
     public bool HasLabel { get; init; }
 
     public bool HasFeedback { get; init; }
 
     public string Description { get; init; } = "";
 
-    public bool TrimText { get; init; }
-
     public required object Object { get; init; }
+
+    public required object ModifiedObject { get; set; }
+
+    public string Text { get; set; } = "";
     
-    public Func<Task>? SetValueAsyncHandler { get; init; }
+    public string ModifiedText { get; set; } = "";
+
+    public Func<object, Task>? ModifiedHandlerAsync { get; init; }
 
     public required PropertyInfo PropertyInfo { get; init; }
+
+    public IReadOnlyList<Func<string, ValidationResult?>> Validators { get; init; } = [];
 
     public string ValidationFeedback { get; set; } = "";
 
     public ValidationState ValidationState { get; set; }
 
     public static IList<FormControlModel> From(
-        object @object)
+        object @object,
+        object modifiedObject,
+        Func<object, Task> modifiedAsync)
     {
         var list = new List<FormControlModel>();
 
@@ -55,8 +63,9 @@ public class FormControlModel
                 From(
                     property,
                     @object,
-                    () => Task.CompletedTask);
-            
+                    modifiedObject,
+                    modifiedAsync);
+
             list.Add(controlInfo);
         }
 
@@ -66,7 +75,8 @@ public class FormControlModel
     public static FormControlModel From(
         PropertyInfo propertyInfo,
         object @object,
-        Func<Task> setValueAsync)
+        object modifiedObject,
+        Func<object, Task> modifiedAsync)
     {
         var displayNameAttribute =
             propertyInfo
@@ -78,34 +88,34 @@ public class FormControlModel
         var displayName =
             displayNameAttribute?.DisplayName
             ?? propertyInfo.Name;
-        
+
         var isReadOnly = !propertyInfo.CanWrite;
-        
+
         var isPassword =
             propertyInfo
                 .GetCustomAttributes(
                     typeof(PasswordPropertyTextAttribute),
                     false)
                 .Any();
-        
+
         var propertyType =
             propertyInfo.PropertyType;
-        
+
         var isNullableValueType =
             propertyType.IsGenericType
             && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
-        
+
         var isRequiredValueType =
             propertyType.IsValueType
             && !isNullableValueType;
-        
+
         var nullabilityContext =
             new NullabilityInfoContext();
         var nullability =
             nullabilityContext.Create(propertyInfo);
         var isRequiredReferenceType =
             nullability.ReadState == NullabilityState.NotNull;
-        
+
         var requiredAttribute =
             propertyInfo
                 .GetCustomAttributes(
@@ -117,7 +127,7 @@ public class FormControlModel
             requiredAttribute != null
             || isRequiredValueType
             || isRequiredReferenceType;
-        
+
         var isMultilineText =
             propertyInfo
                 .GetCustomAttributes(
@@ -130,25 +140,39 @@ public class FormControlModel
 
         var hasFeedback =
             !isReadOnly;
-        
+
         var description =
             propertyInfo
                 .GetCustomAttributes(
                     typeof(DescriptionAttribute),
                     false)
                 .FirstOrDefault() as DescriptionAttribute;
-        
-        var trimText =
-            propertyInfo
-                .GetCustomAttributes(
-                    typeof(TrimTextAttribute),
-                    false)
-                .Any();
 
         var requiredMessage =
             requiredAttribute?.ErrorMessage
             ?? $"{displayName} is required.";
 
+        var validators =
+            propertyInfo
+                .GetCustomAttributes(
+                    typeof(ValidationAttribute),
+                    false)
+                .Cast<ValidationAttribute>()
+                .Select(item =>
+                    new Func<string, ValidationResult?>(value =>
+                        item.GetValidationResult(
+                            value,
+                            new ValidationContext(
+                                @object,
+                                null,
+                                null))))
+                .ToList();
+
+        var text =
+            GetText(
+                @object,
+                propertyInfo);
+        
         return new()
         {
             PropertyInfo = propertyInfo,
@@ -160,17 +184,24 @@ public class FormControlModel
             IsRequired = isRequired,
             IsMultilineText = isMultilineText,
             RequiredMessage = requiredMessage,
-            TrimText = trimText,
             HasLabel = hasLabel,
             HasFeedback = hasFeedback,
             Object = @object,
-            SetValueAsyncHandler = setValueAsync
+            Text = text,
+            ModifiedText = text,
+            Validators = validators,
+            ModifiedObject = modifiedObject,
+            ModifiedHandlerAsync = modifiedAsync
         };
     }
 
-    public async Task SetValueAsync(
+    public async Task SetTextAsync(
         string value)
     {
+        ValidationFeedback = "";
+        ValidationState = ValidationState.None;
+        ModifiedText = value;
+
         if (IsRequired
             && string.IsNullOrEmpty(value))
         {
@@ -178,10 +209,24 @@ public class FormControlModel
             return;
         }
 
+        foreach (var validator in Validators)
+        {
+            var validationResult = validator(value);
+            if (validationResult != null
+                && validationResult != ValidationResult.Success)
+            {
+                Error(
+                    validationResult.ErrorMessage
+                    ?? "Unknown error");
+
+                return;
+            }
+        }
+
         if (PropertyInfo.PropertyType.IsEnum)
         {
             PropertyInfo.SetValue(
-                Object,
+                ModifiedObject,
                 Enum.Parse(
                     PropertyInfo.PropertyType,
                     value));
@@ -199,16 +244,16 @@ public class FormControlModel
             }
 
             PropertyInfo.SetValue(
-                Object,
+                ModifiedObject,
                 typeValue);
         }
-        
+
         if (typeof(int?) == PropertyInfo.PropertyType)
         {
             if (string.IsNullOrEmpty(value))
             {
                 PropertyInfo.SetValue(
-                    Object,
+                    ModifiedObject,
                     null);
             }
             else
@@ -223,7 +268,7 @@ public class FormControlModel
                 }
 
                 PropertyInfo.SetValue(
-                    Object,
+                    ModifiedObject,
                     typeValue);
             }
         }
@@ -241,7 +286,7 @@ public class FormControlModel
             }
 
             PropertyInfo.SetValue(
-                Object,
+                ModifiedObject,
                 typeValue);
         }
 
@@ -250,7 +295,7 @@ public class FormControlModel
             if (string.IsNullOrEmpty(value))
             {
                 PropertyInfo.SetValue(
-                    Object,
+                    ModifiedObject,
                     null);
             }
             else
@@ -265,7 +310,7 @@ public class FormControlModel
                 }
 
                 PropertyInfo.SetValue(
-                    Object,
+                    ModifiedObject,
                     typeValue);
             }
         }
@@ -273,10 +318,10 @@ public class FormControlModel
         if (typeof(string) == PropertyInfo.PropertyType)
         {
             PropertyInfo.SetValue(
-                Object,
+                ModifiedObject,
                 value);
         }
-        
+
         if (typeof(DateOnly) == PropertyInfo.PropertyType)
         {
             if (!DateOnly.TryParseExact(
@@ -289,16 +334,16 @@ public class FormControlModel
             }
 
             PropertyInfo.SetValue(
-                Object,
+                ModifiedObject,
                 typeValue);
         }
-        
+
         if (typeof(DateOnly?) == PropertyInfo.PropertyType)
         {
             if (string.IsNullOrEmpty(value))
             {
                 PropertyInfo.SetValue(
-                    Object,
+                    ModifiedObject,
                     null);
             }
             else
@@ -313,13 +358,13 @@ public class FormControlModel
                 }
 
                 PropertyInfo.SetValue(
-                    Object,
+                    ModifiedObject,
                     typeValue);
             }
         }
 
-        if (SetValueAsyncHandler != null)
-            await SetValueAsyncHandler.Invoke();
+        if (ModifiedHandlerAsync != null)
+            await ModifiedHandlerAsync.Invoke(ModifiedObject);
     }
 
     private void Error(
@@ -327,6 +372,93 @@ public class FormControlModel
     {
         ValidationFeedback = text;
         ValidationState = ValidationState.Invalid;
+    }
+
+    public async Task Update()
+    {
+        await SetTextAsync(ModifiedText);
+    }
+
+    private static string GetText(
+        object @object,
+        PropertyInfo propertyInfo)
+    {
+        if (propertyInfo.PropertyType.IsEnum)
+        {
+            var propertyValue = propertyInfo.GetValue(@object);
+            return Enum.GetName(propertyInfo.PropertyType, propertyValue!)!;
+        }
+
+        if (typeof(bool) == propertyInfo.PropertyType)
+        {
+            var propertyValue = propertyInfo.GetValue(@object) is true;
+            return Convert.ToString(propertyValue, CultureInfo.InvariantCulture);
+        }
+
+        if (typeof(int) == propertyInfo.PropertyType)
+        {
+            var intValue =
+                (int)propertyInfo.GetValue(@object)!;
+
+            return Convert.ToString(
+                intValue,
+                CultureInfo.InvariantCulture);
+        }
+
+        if (typeof(int?) == propertyInfo.PropertyType)
+        {
+            var intValue =
+                (int?)propertyInfo.GetValue(@object);
+
+            return intValue == null
+                ? ""
+                : Convert.ToString(
+                    intValue,
+                    CultureInfo.InvariantCulture)!;
+        }
+
+        if (typeof(decimal) == propertyInfo.PropertyType)
+        {
+            var decimalValue =
+                (decimal)(propertyInfo.GetValue(@object) ?? 0);
+
+            return Convert.ToString(
+                decimalValue,
+                CultureInfo.InvariantCulture);
+        }
+
+        if (typeof(decimal?) == propertyInfo.PropertyType)
+        {
+            var decimalValue =
+                (decimal?)propertyInfo.GetValue(@object);
+
+            return decimalValue == null
+                ? ""
+                : Convert.ToString(
+                    decimalValue,
+                    CultureInfo.InvariantCulture)!;
+        }
+
+        if (typeof(string) == propertyInfo.PropertyType)
+        {
+            return propertyInfo.GetValue(@object)?.ToString() ?? "";
+        }
+
+        if (typeof(DateOnly) == propertyInfo.PropertyType)
+        {
+            return propertyInfo.GetValue(@object) is DateOnly dateOnly
+                ? dateOnly.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+                : "";
+        }
+
+        if (typeof(DateOnly?) == propertyInfo.PropertyType)
+        {
+            return propertyInfo.GetValue(@object) is DateOnly dateOnlyValue
+                ? dateOnlyValue.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+                : "";
+        }
+
+        return "";
     }
 }
 
@@ -336,5 +468,5 @@ public partial class FormControl
     public FormControlModel? Model { get; set; }
 
     [Parameter]
-    public EventCallback OnModified { get; set; }
+    public EventCallback<object?> Modified { get; set; }
 }

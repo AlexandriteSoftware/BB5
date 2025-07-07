@@ -1,14 +1,29 @@
-﻿<form @onsubmit="HandleSubmit"
-      @attributes="@Attributes">
+﻿<form @onsubmit:preventDefault
+      @onsubmit="HandleSubmitAsync"
+      @attributes="@FormAttributes">
+    @if (!string.IsNullOrEmpty(Error))
+    {
+        <Alert Class="mb-3"
+               Content="Error"
+               Color="AlertColor.Warning"
+               Dismissible="@true"
+               Dismissed="@(() => Error = null)" />
+    }
+
     @foreach (var controlInfo in FormControls)
     {
         <div class="mb-3">
             <FormControl Model="@controlInfo"
-                         OnModified="@OnModified" />
+                         Modified="@Modified"/>
         </div>
     }
 
     @Controls
 
-    @Actions
+    <div class="mb-3">
+        @Actions
+        <Button OnClick="HandleSubmitAsync"
+                Variant="ButtonVariant.Primary"
+                Content="@SubmitContent" />
+    </div>
 </form>

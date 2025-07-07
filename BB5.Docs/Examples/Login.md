@@ -1,8 +1,16 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+# Login
 
-namespace BB5.Examples.Pages.Examples;
+Requirements:
 
+- Login is a simple form, with two fields: email and password.
+- Both fields are required.
+- Email has a custom validator attached.
+- Form is submitted either with the Enter key or by clicking the Login button.
+- When a user/password pair is unknown, the form displays an error message.
+
+Form model:
+
+```csharp
 public class LoginModel
 {
     [Required] 
@@ -13,7 +21,11 @@ public class LoginModel
     [PasswordPropertyText]
     public string Password { get; set; } = string.Empty;
 }
+```
 
+Custom validator:
+
+```csharp
 public class AllowedEmailDomainsAttribute(
         params string[] allowedDomains)
     : ValidationAttribute
@@ -43,30 +55,41 @@ public class AllowedEmailDomainsAttribute(
         return ValidationResult.Success;
     }
 }
+```
 
-public partial class Login
+Form:
+
+```razor
+<Form Object="@Model"
+      Submitted="HandleSubmitAsync"
+      SubmitContent="@("Login")" />
+```
+
+Code-behind:
+
+```csharp
+private LoginModel Model { get; set; } = new();
+
+private Task HandleSubmitAsync(
+    FormActionContext context)
 {
-    private LoginModel Model { get; set; } = new();
-    private string Message { get; set; } = "";
-
-    private Task HandleSubmitAsync(
-        FormActionContext context)
+    var model = (LoginModel)context.Object!;
+    
+    // simulate a login check
+    
+    if (model.Email != "user@local"
+        && model.Password != "secret")
     {
-        var model = (LoginModel)context.Object!;
+        context.Errors.Add(
+            new ValidationResult(
+                "Invalid email or password."));
 
-        if (model.Email != "user@local"
-            && model.Password != "secret")
-        {
-            context.Errors.Add(
-                new ValidationResult(
-                    "Invalid email or password."));
-
-            Message = "";
-            return Task.CompletedTask;
-        }
-
-        Message = "Login successful.";
-
+        Message = "";
         return Task.CompletedTask;
     }
+
+    Message = "Login successful."
+
+    return Task.CompletedTask;
 }
+```

@@ -33,7 +33,7 @@ public partial class Alert
     public bool Dismissible { get; set; }
     
     [Parameter]
-    public EventCallback OnDismiss { get; set; }
+    public EventCallback Dismissed { get; set; }
 
     [Parameter]
     public string Class { get; set; } = "";
@@ -105,6 +105,6 @@ public partial class Alert
 
     private async Task DismissAsync()
     {
-        await OnDismiss.InvokeAsync();
+        await Dismissed.InvokeAsync();
     }
 }

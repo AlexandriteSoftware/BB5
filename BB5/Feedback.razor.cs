@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
 namespace BB5;
@@ -14,31 +16,81 @@ public partial class Feedback
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    private string Classes { get; set; } = "";
+    [Parameter]
+    public string Class { get; set; } = "";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Attributes { get; set; }
+    
+    private List<object> List { get; set; } = [];
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        var classList =
+        var classes =
             new List<string>();
 
         switch (ValidationState)
         {
             case ValidationState.Valid:
-                classList.Add("valid-feedback");
+                classes.Add("valid-feedback");
                 break;
             case ValidationState.Invalid:
-                classList.Add("invalid-feedback");
+                classes.Add("invalid-feedback");
                 break;
             case ValidationState.None:
             default:
                 break;
         }
 
-        Classes =
+        if (!string.IsNullOrEmpty(Class))
+        {
+            classes.AddRange(
+                Class.Split(
+                    ' ',
+                    StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        Attributes ??= [];
+
+        Attributes["class"] =
             string.Join(
                 " ",
-                classList);
+                classes);
+
+        List = GetErrors(Content);
+    }
+    
+    private List<object> GetErrors(
+        object? items)
+    {
+        switch (items)
+        {
+            case string singleString:
+                return [singleString];
+            case MarkupString singleMarkupString:
+                return [singleMarkupString];
+        }
+
+        if (items is not IEnumerable enumerable)
+            return [];
+        
+        var list = new List<object>();
+
+        foreach (var item in enumerable)
+        {
+            switch (item)
+            {
+                case string stringValue:
+                    list.Add(stringValue);
+                    break;
+                case MarkupString markupStringValue:
+                    list.Add(markupStringValue);
+                    break;
+            }
+        }
+        
+        return list;
     }
 }

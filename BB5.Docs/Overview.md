@@ -2,6 +2,10 @@
 
 BB5 is a component library for Blazor, designed with Bootstrap 5.
 
+## Examples
+
+- [Login](./Examples/Login.md)
+
 ## Guides
 
 - [Buttons](./Guides/Buttons.md)

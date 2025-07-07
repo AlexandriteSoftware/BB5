@@ -1,14 +1,19 @@
 ﻿@namespace BB5
 
-<div class="@Classes">
-    @if (Content is MarkupString markupContent)
+<div @attributes="@Attributes">
+    @foreach (var item in List)
     {
-        @markupContent
+        <div>
+            @if (item is MarkupString markupItem)
+            {
+                @markupItem
+            }
+            else
+            {
+                @item
+            }
+        </div>
     }
-    else
-    {
-        @Content
-    }
-    
+
     @ChildContent
 </div>

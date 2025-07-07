@@ -76,12 +76,6 @@ Whether the control has a description text.
 
 Initialised from `[Description(...)]`.
 
-### `TrimText`
-
-Whether the control's text is trimmed before validation.
-
-Initialised by checking existence of `[TrimText]`.
-
 ## Validation
 
 When the user's input is validated, two model's properties are updated:

@@ -5,52 +5,13 @@
 @layout ArticleLayout
 
 <h2 class="display-5 mt-5">
-    Login #1
+    Login
 </h2>
-<p class="lead">
-    Form fields are generated from a model.
-</p>
 
-<Form Object="LoginModel"
-      OnSubmit="HandleLogin">
-    <Actions>
-        <Button OnClick="HandleLogin"
-                Variant="ButtonVariant.Primary">
-            <Icon Id="box-arrow-in-right" />
-            Login
-        </Button>
-    </Actions>
-</Form>
+<Form Object="@Model"
+      Submitted="HandleSubmitAsync"
+      SubmitContent="@("Login")" />
 
-<h2 class="display-5 mt-5">
-    Login #2
-</h2>
-<p class="lead">
-    Form controls are layouted manually.
-</p>
-
-<Form OnSubmit="HandleLogin">
-    <Controls>
-        <div class="mb-3">
-            <InputLabel Content="@Login2[0].DisplayName" />
-            <BB5.InputText ValueChanged="@Login2[0].SetValueAsync"/>
-            <Feedback Content="@Login2[0].ValidationFeedback" />
-        </div>
-        <div class="mb-3">
-            <InputLabel Content="@Login2[1].DisplayName" />
-            <InputPassword ValueChanged="@Login2[1].SetValueAsync"/>
-            <Feedback Content="@Login2[1].ValidationFeedback" />
-        </div>
-    </Controls>
-    <Actions>
-        <Button OnClick="HandleLogin2"
-                Variant="ButtonVariant.Primary">
-            <Icon Id="box-arrow-in-right"/>
-            Login
-        </Button>
-    </Actions>
-</Form>
-
-<components Content="@Message"
+<Alert Content="@Message"
        Class="mt-3"
        Color="AlertColor.Success" />

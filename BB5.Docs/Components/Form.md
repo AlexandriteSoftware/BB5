@@ -27,3 +27,9 @@ While editing, form's controls update the object.
 
 The user can signal that editing is complete by submitting the form. The form then validates
 the data and invokes `Submitted` event handler.
+
+Form has two built-in placeholders:
+
+- `Content` for controls
+- `Actions` for form's action buttons
+ 

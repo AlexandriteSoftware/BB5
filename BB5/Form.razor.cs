@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -10,16 +8,26 @@ using Microsoft.AspNetCore.Components;
 
 namespace BB5;
 
+public class FormActionContext
+{
+    public object? Object { get; set; }
+    
+    public IList<ValidationResult> Errors { get; init; } = [];
+}
+
 public partial class Form
 {
     [Parameter]
     public object? Object { get; set; }
     
     [Parameter]
-    public EventCallback OnModified { get; set; }
+    public EventCallback<object?> Modified { get; set; }
 
     [Parameter]
-    public EventCallback<object?> OnSubmit { get; set; }
+    public EventCallback<FormActionContext> Submitted { get; set; }
+
+    [Parameter]
+    public object? SubmitContent { get; set; } = "Submit";
     
     [Parameter]
     public RenderFragment? Controls { get; set; }
@@ -28,12 +36,20 @@ public partial class Form
     public RenderFragment? Actions { get; set; }
     
     [Parameter]
-    public string Class { get; set; } = "";
+    public string? Class { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
     
+    private object? _previousObject;
+    
+    private Dictionary<string, object>? FormAttributes { get; set; }
+
+    private object? ModifiedObject { get; set; }
+
     private List<FormControlModel> FormControls { get; set; } = [];
+    
+    private string? Error { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -50,32 +66,88 @@ public partial class Form
                     StringSplitOptions.RemoveEmptyEntries));
         }
 
-        Attributes ??= [];
+        FormAttributes = [];
+        
+        if (classes.Count > 0)
+        {
+            FormAttributes["class"] =
+                string.Join(
+                    " ",
+                    classes);
+        }
 
-        Attributes["class"] =
-            string.Join(
-                " ",
-                classes);
+        if (ReferenceEquals(_previousObject, Object))
+        {
+            return;
+        }
+
+        _previousObject = Object;
         
         FormControls.Clear();
 
-        if (Object is {} @object)
+        ModifiedObject = ShallowCopy(Object);
+
+        if (Object is { } @object
+            && ModifiedObject is { } modifiedObject)
         {
-            foreach (var property in @object.GetType().GetProperties())
-            {
-                var controlInfo =
-                    FormControlModel.From(
-                        property,
-                        @object,
-                        async () => await OnModified.InvokeAsync());
-                
-                FormControls.Add(controlInfo);
-            }
+            FormControls.AddRange(
+                FormControlModel.From(
+                    @object,
+                    modifiedObject,
+                    async value => await Modified.InvokeAsync(value)));
         }
     }
 
-    private async Task HandleSubmit()
+    private async Task HandleSubmitAsync()
     {
-        await OnSubmit.InvokeAsync();
+        var valid = true;
+        foreach (var control in FormControls)
+        {
+            await control.Update();
+            valid &= control.ValidationState != ValidationState.Invalid;
+        }
+        
+        if (!valid)
+            return;
+
+        Error = null;
+        
+        var context =
+            new FormActionContext
+            {
+                Object = ModifiedObject,
+                Errors = []
+            };
+
+        await Submitted.InvokeAsync(context);
+        
+        if (context.Errors.Count > 0)
+        {
+            Error =
+                string.Join(
+                    " ",
+                    context
+                        .Errors
+                        .Select(
+                            item =>
+                                item.ErrorMessage
+                                ?? "Unknown error"));
+        }
+    }
+    
+    private static object? ShallowCopy(
+        object? obj)
+    {
+        if (obj == null)
+            return null;
+
+        var method =
+            typeof(object)
+                .GetMethod(
+                    "MemberwiseClone",
+                    BindingFlags.Instance
+                    | BindingFlags.NonPublic);
+
+        return method!.Invoke(obj, null);
     }
 }

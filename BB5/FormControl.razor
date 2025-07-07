@@ -1,10 +1,9 @@
-﻿@using System.Globalization
-@{
+﻿@{
     if (Model is not { } model)
         return;
 
     var property = model.PropertyInfo;
-    var @object = model.Object;
+    var @object = model.ModifiedObject;
 }
 
 @if (model.HasLabel)
@@ -15,11 +14,9 @@
 
 @if (property.PropertyType.IsEnum)
 {
-    var propertyValue = property.GetValue(@object);
-
-    <Select Value="@(Enum.GetName(property.PropertyType, propertyValue!))"
+    <Select Value="@model.Text"
             Items="@(Enum.GetNames(property.PropertyType))"
-            ValueChanged="@model.SetValueAsync"
+            ValueChanged="model.SetTextAsync"
             Id="@model.Id" />
 }
 
@@ -32,7 +29,7 @@
                        ValueChanged="@(async value =>
                                      {
                                          property.SetValue(@object, value);
-                                         await OnModified.InvokeAsync();
+                                         await Modified.InvokeAsync(@object);
                                      })"/>
     <InputCheckLabel Content="@model.DisplayName"
                      For="@model.Id" />
@@ -40,125 +37,86 @@
 
 @if (typeof(int) == property.PropertyType)
 {
-    var intValue =
-        (int)property.GetValue(@object)!;
-
-    var valueText =
-        Convert.ToString(
-            intValue,
-            CultureInfo.InvariantCulture);
-
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    Readonly="@true"/>
     }
     else
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetValueAsync" />
+                   ValueChanged="@model.SetTextAsync" />
     }
 }
 
 @if (typeof(int?) == property.PropertyType)
 {
-    var intValue =
-        (int?)property.GetValue(@object);
-
-    var valueText =
-        intValue == null
-            ? ""
-            : Convert.ToString(
-                intValue,
-                CultureInfo.InvariantCulture);
-
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    Readonly="@true"/>
     }
     else
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetValueAsync" />
+                   ValueChanged="@model.SetTextAsync" />
     }
 }
 
-
 @if (typeof(decimal) == property.PropertyType)
 {
-    var decimalValue =
-        (decimal)(property.GetValue(@object) ?? 0);
-
-    var valueText =
-        Convert.ToString(
-            decimalValue,
-            CultureInfo.InvariantCulture);
-
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    Readonly="@true"/>
     }
     else
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetValueAsync" />
+                   ValueChanged="@model.SetTextAsync" />
     }
 }
 
 @if (typeof(decimal?) == property.PropertyType)
 {
-    var decimalValue =
-        (decimal?)property.GetValue(@object);
-
-    var valueText =
-        decimalValue == null
-            ? ""
-            : Convert.ToString(
-                decimalValue,
-                CultureInfo.InvariantCulture);
-
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    Readonly="@true"/>
     }
     else
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetValueAsync" />
+                   ValueChanged="@model.SetTextAsync" />
     }
 }
 
 @if (typeof(string) == property.PropertyType)
 {
-    var valueText = property.GetValue(@object)?.ToString() ?? "";
-
     @if (model.IsReadOnly)
     {
         if (model.IsMultilineText)
         {
             <InputTextArea Id="@model.Id"
-                           Value="@valueText"
+                           Value="@model.Text"
                            Readonly="@true" />
         }
         else
         {
             <InputText Id="@model.Id"
-                       Value="@valueText"
+                       Value="@model.Text"
                        Readonly="@true"/>
         }
     }
@@ -168,23 +126,23 @@
         {
             <InputPassword Id="@model.Id"
                            ValidationState="@model.ValidationState"
-                           ValueChanged="@model.SetValueAsync" />
+                           ValueChanged="@model.SetTextAsync" />
         }
         else
         {
             if (model.IsMultilineText)
             {
                 <InputTextArea Id="@model.Id"
-                               Value="@valueText"
+                               Value="@model.Text"
                                ValidationState="@model.ValidationState"
-                               ValueChanged="@model.SetValueAsync" />
+                               ValueChanged="@model.SetTextAsync" />
             }
             else
             {
                 <InputText Id="@model.Id"
-                           Value="@valueText"
+                           Value="@model.Text"
                            ValidationState="@model.ValidationState"
-                           ValueChanged="@model.SetValueAsync" />
+                           ValueChanged="@model.SetTextAsync" />
             }
         }
     }
@@ -192,44 +150,35 @@
 
 @if (typeof(DateOnly) == property.PropertyType)
 {
-    var valueText = property.GetValue(@object) is DateOnly dateOnly
-        ? dateOnly.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
-        : "";
-
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    Readonly="@true"/>
     }
     else
     {
         <InputDate Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetValueAsync" />
+                   ValueChanged="@model.SetTextAsync" />
     }
 }
 
 @if (typeof(DateOnly?) == property.PropertyType)
 {
-    var valueText =
-        property.GetValue(@object) is DateOnly dateOnlyValue
-            ? dateOnlyValue.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
-            : "";
-
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    Readonly="@true"/>
     }
     else
     {
         <InputDate Id="@model.Id"
-                   Value="@valueText"
+                   Value="@model.Text"
                    ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetValueAsync" />
+                   ValueChanged="@model.SetTextAsync" />
     }
 }
 
