@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace BB5;
 
-public partial class InputTextArea
+public partial class TextArea
 {
     [Parameter]
     public string Value { get; set; } = "";

@@ -10,7 +10,7 @@
                Dismissed="@(() => Error = null)"/>
     }
 
-    @GetControlsTemplate()(FormControls)
+    @GetControlsTemplate()(Model.ToList())
 
     @if (Actions != null || !AutoSubmit)
     {

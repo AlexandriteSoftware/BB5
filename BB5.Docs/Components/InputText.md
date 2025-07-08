@@ -35,6 +35,6 @@ Unmatched parameters will be added as HTML attributes.
 
 ## See also
 
-- [InputTextArea](InputTextArea.md)
+- [TextArea](TextArea.md)
 - [Form](Form.md)
 - [FormControl](FormControl.md)

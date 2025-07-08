@@ -1,13 +1,13 @@
-# InputTextArea
+# TextArea
 
-InputTextArea component provides a multi-line text input. It renders as `<textarea class="form-control" />`.
+TextArea component provides a multi-line text input. It renders as `<textarea class="form-control" />`.
 
 ## Markup
 
 Blazor:
 
 ```razor
-<InputText Rows="3" />
+<TextArea Rows="3" />
 ```
 
 HTML result:

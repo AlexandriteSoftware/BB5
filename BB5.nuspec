@@ -1,7 +1,7 @@
 <package>
   <metadata>
     <id>BB5</id>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <authors>Alexandrite Software</authors>
     <description>BB5 is a powerful set of Blazor components built on top of Bootstrap 5.</description>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

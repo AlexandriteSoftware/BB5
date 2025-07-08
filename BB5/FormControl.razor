@@ -1,23 +1,33 @@
-﻿@{
+﻿@using BB5.Models
+@{
     if (Model is not { } model)
         return;
 
     var property = model.PropertyInfo;
-    var @object = model.ModifiedObject;
 }
 
 @if (model.HasLabel)
 {
-    <InputLabel Content="@model.DisplayName"
-                For="@model.Id" />
+    var properties =
+        model.LabelProperties
+        ?? new();
+
+    <BB5.Label Content="@model.DisplayName"
+               Size="@properties.Size"
+               For="@model.Id" />
 }
 
 @if (property.PropertyType.IsEnum)
 {
-    <Select Value="@model.Text"
-            Items="@(Enum.GetNames(property.PropertyType))"
-            ValueChanged="model.SetTextAsync"
-            Id="@model.Id" />
+    var properties =
+        model.ControlProperties as SelectProperties
+        ?? new();
+
+    <BB5.Select Value="@model.Text"
+                Items="@(Enum.GetNames(property.PropertyType))"
+                Size="@properties.Size"
+                ValueChanged="model.SetTextAsync"
+                Id="@model.Id" />
 }
 
 @if (typeof(bool) == property.PropertyType)
@@ -25,22 +35,28 @@
     <BB5.InputCheckbox Id="@model.Id"
                        Value="@model.Text"
                        ValueChanged="@model.SetTextAsync" />
-    <InputCheckLabel Content="@model.DisplayName"
+    <CheckLabel Content="@model.DisplayName"
                      For="@model.Id" />
 }
 
 @if (typeof(int) == property.PropertyType)
 {
+    var properties =
+        model.ControlProperties as InputTextProperties
+        ?? new();
+
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    Readonly="@true"/>
     }
     else
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    ValidationState="@model.ValidationState"
                    ValueChanged="@model.SetTextAsync" />
     }
@@ -48,16 +64,22 @@
 
 @if (typeof(int?) == property.PropertyType)
 {
+    var properties =
+        model.ControlProperties as InputTextProperties
+        ?? new();
+
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
-                   Readonly="@true"/>
+                   Size="@properties.Size"
+                   Readonly="@true" />
     }
     else
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    ValidationState="@model.ValidationState"
                    ValueChanged="@model.SetTextAsync" />
     }
@@ -65,16 +87,22 @@
 
 @if (typeof(decimal) == property.PropertyType)
 {
+    var properties =
+        model.ControlProperties as InputTextProperties
+        ?? new();
+
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
-                   Readonly="@true"/>
+                   Size="@properties.Size"
+                   Readonly="@true" />
     }
     else
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    ValidationState="@model.ValidationState"
                    ValueChanged="@model.SetTextAsync" />
     }
@@ -82,16 +110,22 @@
 
 @if (typeof(decimal?) == property.PropertyType)
 {
+    var properties =
+        model.ControlProperties as InputTextProperties
+        ?? new();
+
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    Readonly="@true"/>
     }
     else
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    ValidationState="@model.ValidationState"
                    ValueChanged="@model.SetTextAsync" />
     }
@@ -99,61 +133,76 @@
 
 @if (typeof(string) == property.PropertyType)
 {
-    @if (model.IsReadOnly)
+    if (model.IsPassword)
     {
-        if (model.IsMultilineText)
+        var properties =
+            model.ControlProperties as InputPasswordProperties
+            ?? new();
+
+        <InputPassword Id="@model.Id"
+                       Size="@properties.Size"
+                       ValidationState="@model.ValidationState"
+                       ValueChanged="@model.SetTextAsync" />
+    }
+    else if (model.IsTextArea)
+    {
+        @if (model.IsReadOnly)
         {
-            <InputTextArea Id="@model.Id"
-                           Value="@model.Text"
-                           Readonly="@true" />
+            <BB5.TextArea Id="@model.Id"
+                          Value="@model.Text"
+                          Readonly="@true" />
+        }
+        else
+        {
+            <BB5.TextArea Id="@model.Id"
+                          Value="@model.Text"
+                          ValidationState="@model.ValidationState"
+                          ValueChanged="@model.SetTextAsync" />
+        }        
+    }
+    else
+    {
+        var properties =
+            model.ControlProperties as InputTextProperties
+            ?? new();
+
+        @if (model.IsReadOnly)
+        {
+            <InputText Id="@model.Id"
+                       Value="@model.Text"
+                       Size="@properties.Size"
+                       Readonly="@true"/>
         }
         else
         {
             <InputText Id="@model.Id"
                        Value="@model.Text"
-                       Readonly="@true"/>
-        }
-    }
-    else
-    {
-        if (model.IsPassword)
-        {
-            <InputPassword Id="@model.Id"
-                           ValidationState="@model.ValidationState"
-                           ValueChanged="@model.SetTextAsync" />
-        }
-        else
-        {
-            if (model.IsMultilineText)
-            {
-                <InputTextArea Id="@model.Id"
-                               Value="@model.Text"
-                               ValidationState="@model.ValidationState"
-                               ValueChanged="@model.SetTextAsync" />
-            }
-            else
-            {
-                <InputText Id="@model.Id"
-                           Value="@model.Text"
-                           ValidationState="@model.ValidationState"
-                           ValueChanged="@model.SetTextAsync" />
-            }
+                       Size="@properties.Size"
+                       Placeholder="@properties.Placeholder"
+                       ValidationState="@model.ValidationState"
+                       ValueChanged="@model.SetTextAsync" />
         }
     }
 }
 
 @if (typeof(DateOnly) == property.PropertyType)
 {
+    var properties =
+        model.ControlProperties as InputDateProperties
+        ?? new();
+
     @if (model.IsReadOnly)
     {
         <InputText Id="@model.Id"
                    Value="@model.Text"
-                   Readonly="@true"/>
+                   Size="@properties.Size"
+                   Readonly="@true" />
     }
     else
     {
         <InputDate Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    ValidationState="@model.ValidationState"
                    ValueChanged="@model.SetTextAsync" />
     }
@@ -161,16 +210,22 @@
 
 @if (typeof(DateOnly?) == property.PropertyType)
 {
+    var properties =
+        model.ControlProperties as InputDateProperties
+        ?? new();
+
     @if (model.IsReadOnly)
     {
-        <InputText Id="@model.Id"
+        <InputDate Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    Readonly="@true"/>
     }
     else
     {
         <InputDate Id="@model.Id"
                    Value="@model.Text"
+                   Size="@properties.Size"
                    ValidationState="@model.ValidationState"
                    ValueChanged="@model.SetTextAsync" />
     }
@@ -180,4 +235,11 @@
 {
     <Feedback Content="@model.ValidationFeedback"
               ValidationState="@model.ValidationState"/>
+}
+
+@if (!string.IsNullOrEmpty(model.Description))
+{
+    <div class="form-text">
+        @model.Description
+    </div>
 }

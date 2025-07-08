@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace BB5;
 
-public partial class InputCheckLabel
+public partial class CheckLabel
 {
     [Parameter]
     public object? Content { get; set; }

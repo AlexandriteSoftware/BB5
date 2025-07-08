@@ -1,14 +1,8 @@
-﻿namespace BB5.Examples.Components;
+﻿using BB5.Models;
 
-public class InputTextAreaProperties
-{
-    public ComponentSize Size { get; set; } =
-        ComponentSize.Default;
-    
-    public bool ReadOnly { get; set; } = false;
-}
+namespace BB5.Examples.Components;
 
-public partial class InputTextAreaBuilder
+public partial class TextAreaBuilder
 {
     private object? EditProperties { get; set; }
 
@@ -21,7 +15,7 @@ public partial class InputTextAreaBuilder
         base.OnInitialized();
 
         EditProperties =
-            new InputTextAreaProperties();
+            new TextAreaProperties();
 
         Properties = EditProperties;
     }

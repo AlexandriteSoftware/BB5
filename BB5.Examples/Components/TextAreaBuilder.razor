@@ -1,4 +1,5 @@
 ﻿@using BB5
+@using BB5.Models
 
 <div class="row">
     <div class="col-4">
@@ -10,9 +11,9 @@
     <div class="col-8">
         <div class="m-3">
             @{ var properties =
-                   Properties as InputTextAreaProperties
-                   ?? new InputTextAreaProperties(); }
-            <BB5.InputTextArea Size="@properties.Size"
+                   Properties as TextAreaProperties
+                   ?? new TextAreaProperties(); }
+            <TextArea Size="@properties.Size"
                                Class="@Class"
                                ReadOnly="@properties.ReadOnly" />
         </div>

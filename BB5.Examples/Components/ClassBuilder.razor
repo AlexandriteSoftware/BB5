@@ -1,13 +1,13 @@
 ﻿@using BB5
 
 <div class="mb-3">
-    <InputLabel Content="@("Shadow")" />
-    <Select Value="@(Enum.GetName(Shadow))"
-            Items="@(Enum.GetNames<Shadow>())"
-            ValueChanged="ShadowUpdatedAsync" />
+    <BB5.Label Content="@("Shadow")" />
+    <BB5.Select Value="@(Enum.GetName(Shadow))"
+                Items="@(Enum.GetNames<Shadow>())"
+                ValueChanged="ShadowUpdatedAsync" />
 </div>
 
 <div class="mb-3">
-    <InputLabel Content="@("Class")" />
+    <BB5.Label Content="@("Class")" />
     <BB5.InputText ValueChanged="ClassUpdatedAsync" />
 </div>

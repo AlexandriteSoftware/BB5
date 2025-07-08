@@ -14,7 +14,7 @@ criteria are met and the user has finished editing the control.
 Example of the FormControl structure for string property:
 
 ```razor
-<InputLabel Content="@model.Title" />
+<Label Content="@model.Title" />
 <InputText ... />
 <Feedback ... />
 ```
@@ -86,5 +86,5 @@ When the user's input is validated, two model's properties are updated:
 ## See also
 
 - [Form](Form.md)
-- [InputText](InputTextArea.md)
-- [InputTextArea](InputTextArea.md)
+- [InputText](InputText.md)
+- [TextArea](TextArea.md)

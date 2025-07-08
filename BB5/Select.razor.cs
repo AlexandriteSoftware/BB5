@@ -28,6 +28,9 @@ public partial class Select
     public object? Items { get; set; }
 
     [Parameter]
+    public string Id { get; set; } = "";
+
+    [Parameter]
     public ValidationState ValidationState { get; set; }
 
     [Parameter]

@@ -84,7 +84,7 @@ BB5 is under active development. Contributions, feedback, and ideas are welcome.
 
 BB5 is a commercial product with the following licensing terms:
 
-* **Free** for project contributors ([apply](./CONTRIBUTING.md)).
+* **Free** for project contributors (see CONTRIBUTING.md).
 * **\$99/year** per individual developer ([purchase](https://buy.stripe.com/7sYdR9aco30I1t14Dk0Ba01))
 * **\$999/year** for company-wide use ([purchase](https://buy.stripe.com/4gM9AT0BOata0oXd9Q0Ba00))
 

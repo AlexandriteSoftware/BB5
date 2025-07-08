@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using BB5.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace BB5;
@@ -19,6 +20,9 @@ public partial class Form
 {
     [Parameter]
     public object? Object { get; set; }
+    
+    [Parameter]
+    public EventCallback<FormModel> ModelCreated { get; set; }
     
     [Parameter]
     public EventCallback<FormActionContext> Submitted { get; set; }
@@ -50,13 +54,13 @@ public partial class Form
 
     private object? ModifiedObject { get; set; }
 
-    private List<FormControlModel> FormControls { get; set; } = [];
+    private FormModel Model { get; set; } = new();
     
     private string? Error { get; set; }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        base.OnParametersSet();
+        await base.OnParametersSetAsync();
 
         var classes =
             new List<string>();
@@ -86,14 +90,14 @@ public partial class Form
 
         _previousObject = Object;
         
-        FormControls.Clear();
+        Model.Clear();
 
         ModifiedObject = ShallowCopy(Object);
 
         if (Object is { } @object
             && ModifiedObject is { } modifiedObject)
         {
-            FormControls.AddRange(
+            Model.AddRange(
                 FormControlModel.From(
                     @object,
                     modifiedObject,
@@ -103,13 +107,15 @@ public partial class Form
                             await HandleSubmitAsync();
                     }));
         }
+
+        await ModelCreated.InvokeAsync(Model);
     }
 
     private async Task HandleSubmitAsync()
     {
         var valid = true;
 
-        foreach (var control in FormControls)
+        foreach (var control in Model.ToList())
         {
             await control.Update();
             valid &= control.ValidationState != ValidationState.Invalid;

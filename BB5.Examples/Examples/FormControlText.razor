@@ -1,0 +1,15 @@
+﻿@using System.ComponentModel
+
+<BB5.Form Object="@Model"
+          AutoSubmit="@true" />
+
+@code {
+    public class FormControlTextFormModel
+    {
+        [PasswordPropertyText]
+        [Description("Choosing a complex password is important step in keeping your account secure.")]
+        public string Password { get; set; } = "";
+    }
+    
+    private FormControlTextFormModel Model { get; set; } = new();
+}

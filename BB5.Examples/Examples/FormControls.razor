@@ -1,0 +1,17 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+<BB5.Form Object="@Model"
+          AutoSubmit="@true" />
+
+@code {
+    public class FormControlsFormModel
+    {
+        [EmailAddress]
+        public string Email { get; set; } = "";
+        
+        [TextArea]
+        public string Notes { get; set; } = "";
+    }
+    
+    private FormControlsFormModel Model { get; set; } = new();
+}

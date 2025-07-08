@@ -6,7 +6,7 @@ public class FormBuilderItem
 {
     public string String { get; set; } = "";
     
-    [MultilineText]
+    [TextArea]
     public string Text { get; set; } = "";
 
     [DisplayName("String (optional)")]

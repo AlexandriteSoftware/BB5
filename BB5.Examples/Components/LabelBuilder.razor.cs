@@ -1,16 +1,8 @@
-﻿using System.ComponentModel;
+﻿using BB5.Models;
 
 namespace BB5.Examples.Components;
 
-public class InputLabelProperties
-{
-    public string Content { get; set; } = "";
-    
-    [DisplayName("Content is markup (HTML)")]
-    public bool ContentIsMarkup { get; set; } = false;
-}
-
-public partial class InputLabelBuilder
+public partial class LabelBuilder
 {
     private object? EditProperties { get; set; }
 
@@ -23,7 +15,7 @@ public partial class InputLabelBuilder
         base.OnInitialized();
 
         EditProperties =
-            new InputLabelProperties
+            new LabelProperties
             {
                 Content = "Label"
             };

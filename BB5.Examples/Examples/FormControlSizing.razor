@@ -1,0 +1,33 @@
+﻿@using BB5.Models
+
+<BB5.Form Object="@Model"
+          ModelCreated="@(model =>
+                        {
+                            if (model.Get("Large") is { } controlModelLarge)
+                            {
+                                if (controlModelLarge.LabelProperties is { } labelLarge)
+                                    labelLarge.Size = ComponentSize.Large;
+
+                                if (controlModelLarge.ControlProperties is InputTextProperties controlLarge)
+                                {
+                                    controlLarge.Size = ComponentSize.Large;
+                                    controlLarge.Placeholder = "Large Input";
+                                }
+                            }
+                        })"
+          AutoSubmit="@true" />
+
+@code {
+    public class FormControlSizingFormModel
+    {
+        public string Large { get; set; } = "";
+
+        public string Default { get; set; } = "";
+
+        [ComponentSize(ComponentSize.Small)]
+        [InputTextPlaceholder("Small Input")]
+        public string Small { get; set; } = "";
+    }
+    
+    private FormControlSizingFormModel Model { get; set; } = new();
+}

@@ -4,13 +4,16 @@ using Microsoft.AspNetCore.Components;
 
 namespace BB5;
 
-public partial class InputLabel
+public partial class Label
 {
     [Parameter]
     public object? Content { get; set; }
     
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+    
+    [Parameter]
+    public ComponentSize Size { get; set; }
     
     [Parameter]
     public string For { get; set; } = "";
@@ -20,6 +23,8 @@ public partial class InputLabel
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
+
+    private Dictionary<string, object?>? LabelAttributes { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -38,15 +43,32 @@ public partial class InputLabel
                     ' ',
                     StringSplitOptions.RemoveEmptyEntries));
         }
+        
+        switch (Size)
+        {
+            case ComponentSize.Small:
+                classes.Add("small");
+                break;
+            case ComponentSize.Large:
+                classes.Add("fs-5");
+                break;
+            case ComponentSize.Default:
+            default:
+                break;
+        }
 
-        Attributes ??= [];
+        LabelAttributes = [];
 
         if (!string.IsNullOrEmpty(For))
-            Attributes["for"] = For;
+            LabelAttributes["for"] = For;
 
-        Attributes["class"] =
-            string.Join(
-                " ",
-                classes);
+        if (classes.Count > 0)
+        {
+            LabelAttributes["class"] =
+                string.Join(
+                    " ",
+                    classes);
+        }
+
     }
 }

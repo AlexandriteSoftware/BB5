@@ -1,4 +1,5 @@
 ﻿@using BB5
+@using BB5.Models
 
 <div class="row">
     <div class="col-4">
@@ -10,13 +11,14 @@
     <div class="col-8">
         <div class="m-3">
             @{ var properties =
-                   Properties as InputLabelProperties
+                   Properties as LabelProperties
                    ?? new(); }
-            <InputLabel Class="@Class"
-                        Content="@(
-                                 properties.ContentIsMarkup
-                                ? (MarkupString)properties.Content
-                                : properties.Content)" />
+            <BB5.Label Class="@Class"
+                       Size="@properties.Size"
+                       Content="@(
+                                properties.ContentIsMarkup
+                                    ? (MarkupString)properties.Content
+                                    : properties.Content)" />
             </div>
     </div>
 </div>

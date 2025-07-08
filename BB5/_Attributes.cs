@@ -2,23 +2,24 @@
 
 namespace BB5;
 
-public class MultilineTextAttribute
+[AttributeUsage(AttributeTargets.Property)]
+public class TextAreaAttribute
     : Attribute;
 
-/// <summary>
-///     Specifies where to look for form-related attributes
-///     for the current member or type.
-/// </summary>
 [AttributeUsage(
-    AttributeTargets.Method
-    | AttributeTargets.Property
-    | AttributeTargets.Class,
-    AllowMultiple = true)]
-public class GetAnnotationsFromAttribute(
-        Type sourceType,
-        string? memberName = null)
+    AttributeTargets.Class
+    | AttributeTargets.Property)]
+public class ComponentSizeAttribute(
+        ComponentSize size)
     : Attribute
 {
-    public Type SourceType { get; } = sourceType;
-    public string? MemberName { get; } = memberName;
+    public ComponentSize Size => size;
+}
+
+[AttributeUsage(AttributeTargets.Property)]
+public class InputTextPlaceholderAttribute(
+        string text)
+    : Attribute
+{
+    public string Text => text;
 }
