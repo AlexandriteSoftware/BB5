@@ -22,15 +22,9 @@
 
 @if (typeof(bool) == property.PropertyType)
 {
-    var propertyValue = property.GetValue(@object) is true;
-
     <BB5.InputCheckbox Id="@model.Id"
-                       Value="@propertyValue"
-                       ValueChanged="@(async value =>
-                                     {
-                                         property.SetValue(@object, value);
-                                         await Modified.InvokeAsync(@object);
-                                     })"/>
+                       Value="@model.Text"
+                       ValueChanged="@model.SetTextAsync" />
     <InputCheckLabel Content="@model.DisplayName"
                      For="@model.Id" />
 }

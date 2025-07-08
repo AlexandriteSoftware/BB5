@@ -7,23 +7,21 @@
                Content="Error"
                Color="AlertColor.Warning"
                Dismissible="@true"
-               Dismissed="@(() => Error = null)" />
+               Dismissed="@(() => Error = null)"/>
     }
 
-    @foreach (var controlInfo in FormControls)
+    @GetControlsTemplate()(FormControls)
+
+    @if (Actions != null || !AutoSubmit)
     {
         <div class="mb-3">
-            <FormControl Model="@controlInfo"
-                         Modified="@Modified"/>
+            @Actions
+            @if (!AutoSubmit)
+            {
+                <Button OnClick="@HandleSubmitAsync"
+                        Variant="ButtonVariant.Primary"
+                        Content="@SubmitContent"/>
+            }
         </div>
     }
-
-    @Controls
-
-    <div class="mb-3">
-        @Actions
-        <Button OnClick="HandleSubmitAsync"
-                Variant="ButtonVariant.Primary"
-                Content="@SubmitContent" />
-    </div>
 </form>

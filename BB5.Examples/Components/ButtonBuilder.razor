@@ -2,19 +2,23 @@
 
 <div class="row">
     <div class="col-4">
-        <Form Object="Properties"
-              Modified="@(() => StateHasChanged())" />
-        <ClassBuilder OnClassUpdated="HandleStyleUpdate"/>
+        <Form Object="@EditProperties"
+              Submitted="@(ctx => Properties = ctx.Object)"
+              AutoSubmit="@true" />
+        <ClassBuilder OnClassUpdated="@(value => Class = value)" />
     </div>
     <div class="col-8">
         <div class="m-3">
-            <Button Variant="@Properties.Variant"
-                    Class="@ButtonClass"
-                    Outline="@Properties.Outline"
+            @{ var properties =
+                   Properties as ButtonProperties
+                   ?? new(); }
+            <Button Variant="@properties.Variant"
+                    Class="@Class"
+                    Outline="@properties.Outline"
                     Content="@(
-                             Properties.ContentIsMarkup
-                                 ? (MarkupString)Properties.Content
-                                 : Properties.Content)" />
+                             properties.ContentIsMarkup
+                                 ? (MarkupString)properties.Content
+                                 : properties.Content)" />
         </div>
     </div>
 </div>

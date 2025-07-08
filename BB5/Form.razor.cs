@@ -21,19 +21,22 @@ public partial class Form
     public object? Object { get; set; }
     
     [Parameter]
-    public EventCallback<object?> Modified { get; set; }
-
-    [Parameter]
     public EventCallback<FormActionContext> Submitted { get; set; }
 
     [Parameter]
     public object? SubmitContent { get; set; } = "Submit";
     
     [Parameter]
-    public RenderFragment? Controls { get; set; }
+    public RenderFragment<IEnumerable<FormControlModel>>? ControlsTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<FormControlModel>? ControlTemplate { get; set; }
 
     [Parameter]
     public RenderFragment? Actions { get; set; }
+    
+    [Parameter]
+    public bool AutoSubmit { get; set; }
     
     [Parameter]
     public string? Class { get; set; }
@@ -94,13 +97,18 @@ public partial class Form
                 FormControlModel.From(
                     @object,
                     modifiedObject,
-                    async value => await Modified.InvokeAsync(value)));
+                    async _ =>
+                    {
+                        if (AutoSubmit)
+                            await HandleSubmitAsync();
+                    }));
         }
     }
 
     private async Task HandleSubmitAsync()
     {
         var valid = true;
+
         foreach (var control in FormControls)
         {
             await control.Update();
@@ -149,5 +157,44 @@ public partial class Form
                     | BindingFlags.NonPublic);
 
         return method!.Invoke(obj, null);
+    }
+    
+    private RenderFragment<IEnumerable<FormControlModel>> GetControlsTemplate()
+    {
+        return ControlsTemplate
+               ?? GetDefaultControlsTemplate();
+    }
+
+    private RenderFragment<IEnumerable<FormControlModel>> GetDefaultControlsTemplate()
+    {
+        return items =>
+            builder =>
+            {
+                var controlTemplate = GetControlTemplate();
+                foreach (var item in items)
+                {
+                    controlTemplate(item)(builder);
+                }
+            };
+    }
+    
+    private RenderFragment<FormControlModel> GetControlTemplate()
+    {
+        return ControlTemplate
+               ?? GetDefaultControlTemplate();
+    }
+
+    private RenderFragment<FormControlModel> GetDefaultControlTemplate()
+    {
+        return item =>
+            builder =>
+            {
+                builder.OpenElement(0, "div");
+                builder.AddAttribute(1, "class", "mb-3");
+                builder.OpenComponent(2, typeof(FormControl));
+                builder.AddAttribute(3, "Model", item);
+                builder.CloseComponent();
+                builder.CloseElement();
+            };
     }
 }

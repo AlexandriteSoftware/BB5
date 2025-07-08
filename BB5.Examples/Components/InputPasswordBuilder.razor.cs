@@ -1,38 +1,28 @@
 ﻿namespace BB5.Examples.Components;
 
+public class InputPasswordProperties
+{
+    public ComponentSize Size { get; set; } =
+        ComponentSize.Default;
+    
+    public bool ReadOnly { get; set; } = false;
+}
+
 public partial class InputPasswordBuilder
 {
-    private ComponentSize Size { get; set; } =
-        ComponentSize.Default;
+    private object? EditProperties { get; set; }
 
-    private bool ReadOnly { get; set; }
-    private ComponentSize InputPasswordSize { get; set; }
-    private string? InputPasswordClass { get; set; } = "";
-    private bool InputPasswordReadOnly { get; set; }
+    private object? Properties { get; set; }
 
+    private string Class { get; set; } = "";
+    
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        InputPasswordSize = Size;
-        InputPasswordReadOnly = ReadOnly;
-    }
+        EditProperties =
+            new InputPasswordProperties();
 
-    private void SizeUpdated(
-        string value)
-    {
-        InputPasswordSize = Enum.Parse<ComponentSize>(value);
-    }
-
-    private void ReadOnlyUpdated(
-        bool value)
-    {
-        InputPasswordReadOnly = value;
-    }
-
-    private void HandleStyleUpdate(
-        string style)
-    {
-        InputPasswordClass = style;
+        Properties = EditProperties;
     }
 }

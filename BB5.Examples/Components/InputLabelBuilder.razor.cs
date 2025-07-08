@@ -8,25 +8,26 @@ public class InputLabelProperties
     
     [DisplayName("Content is markup (HTML)")]
     public bool ContentIsMarkup { get; set; } = false;
-    public bool Dismissible { get; set; }
 }
 
 public partial class InputLabelBuilder
 {
-    private InputLabelProperties Properties { get; set; } = new();
-    private string? InputLabelClass { get; set; } = "";
+    private object? EditProperties { get; set; }
+
+    private object? Properties { get; set; }
+
+    private string Class { get; set; } = "";
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        Properties.Content = "Label";
-        Properties.Dismissible = false;
-    }
+        EditProperties =
+            new InputLabelProperties
+            {
+                Content = "Label"
+            };
 
-    private void HandleStyleUpdate(
-        string style)
-    {
-        InputLabelClass = style;
+        Properties = EditProperties;
     }
 }

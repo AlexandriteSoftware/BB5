@@ -5,30 +5,35 @@ namespace BB5.Examples.Components;
 public class AlertProperties
 {
     public AlertColor Color { get; set; }
+
     public string Content { get; set; } = "";
     
     [DisplayName("Content is markup (HTML)")]
     public bool ContentIsMarkup { get; set; } = false;
+
     public bool Dismissible { get; set; }
 }
 
 public partial class AlertBuilder
 {
-    private AlertProperties Properties { get; set; } = new();
-    private string? AlertClass { get; set; } = "";
+    private object? EditProperties { get; set; }
+
+    private object? Properties { get; set; }
+
+    private string Class { get; set; } = "";
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        Properties.Color = AlertColor.Primary;
-        Properties.Content = "This is an alert.";
-        Properties.Dismissible = false;
-    }
+        EditProperties =
+            new AlertProperties
+            {
+                Color = AlertColor.Primary,
+                Content = "This is an alert.",
+                Dismissible = false
+            };
 
-    private void HandleStyleUpdate(
-        string style)
-    {
-        AlertClass = style;
+        Properties = EditProperties;
     }
 }

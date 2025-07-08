@@ -2,6 +2,8 @@
 
 public class InputTextProperties
 {
+    public string Placeholder { get; set; } = "";
+    
     public ComponentSize Size { get; set; } =
         ComponentSize.Default;
     
@@ -10,13 +12,19 @@ public class InputTextProperties
 
 public partial class InputTextBuilder
 {
-    private InputTextProperties Properties { get; set; } = new();
+    private object? EditProperties { get; set; }
 
-    private string? InputTextClass { get; set; } = "";
+    private object? Properties { get; set; }
 
-    private void HandleStyleUpdate(
-        string style)
+    private string Class { get; set; } = "";
+
+    protected override void OnInitialized()
     {
-        InputTextClass = style;
+        base.OnInitialized();
+
+        EditProperties =
+            new InputTextProperties();
+
+        Properties = EditProperties;
     }
 }

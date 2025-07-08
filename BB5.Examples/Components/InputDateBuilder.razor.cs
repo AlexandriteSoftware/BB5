@@ -10,13 +10,19 @@ public class InputDateProperties
 
 public partial class InputDateBuilder
 {
-    private InputDateProperties Properties { get; set; } = new();
+    private object? EditProperties { get; set; }
 
-    private string? InputDateClass { get; set; } = "";
+    private object? Properties { get; set; }
 
-    private void HandleStyleUpdate(
-        string style)
+    private string Class { get; set; } = "";
+    
+    protected override void OnInitialized()
     {
-        InputDateClass = style;
+        base.OnInitialized();
+
+        EditProperties =
+            new InputDateProperties();
+
+        Properties = EditProperties;
     }
 }

@@ -2,19 +2,23 @@
 
 <div class="row">
     <div class="col-4">
-        <Form Object="Properties"
-              Modified="@(() => StateHasChanged())" />
-        <ClassBuilder OnClassUpdated="HandleStyleUpdate" />
+        <Form Object="@EditProperties"
+              Submitted="@(ctx => Properties = ctx.Object)"
+              AutoSubmit="@true" />
+        <ClassBuilder OnClassUpdated="@(value => Class = value)" />
     </div>
     <div class="col-8">
         <div class="m-3">
-            <Alert Color="@Properties.Color"
-                   Class="@AlertClass"
-                   Dismissible="@Properties.Dismissible"
+            @{ var properties =
+                   Properties as AlertProperties
+                   ?? new(); }
+            <Alert Color="@properties.Color"
+                   Class="@Class"
+                   Dismissible="@properties.Dismissible"
                    Content="@(
-                            Properties.ContentIsMarkup
-                                ? (MarkupString)Properties.Content
-                                : Properties.Content)" />
-            </div>
+                            properties.ContentIsMarkup
+                                ? (MarkupString)properties.Content
+                                : properties.Content)"/>
+        </div>
     </div>
 </div>

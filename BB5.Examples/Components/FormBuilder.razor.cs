@@ -37,11 +37,13 @@ public class FormProperties;
 
 public partial class FormBuilder
 {
-    private FormProperties Properties { get; set; } = new();
+    private object? EditProperties { get; set; }
 
-    private string? FormClass { get; set; } = "";
+    private object? Properties { get; set; }
 
-    private object? FormItem { get; set; } =
+    private string Class { get; set; } = "";
+
+    private object? Item { get; set; } =
         new FormBuilderItem
         {
             Date = DateOnly.FromDateTime(DateTime.Today)
@@ -51,12 +53,9 @@ public partial class FormBuilder
     {
         base.OnInitialized();
 
-        FormClass = "";
-    }
-    
-    private void HandleStyleUpdate(
-        string style)
-    {
-        FormClass = style;
+        EditProperties =
+            new FormProperties();
+        
+        Properties = EditProperties;
     }
 }

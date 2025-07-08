@@ -14,21 +14,23 @@ public class ButtonProperties
 
 public partial class ButtonBuilder
 {
-    private ButtonProperties Properties { get; set; } = new();
-    private string? ButtonClass { get; set; } = "";
+    private object? EditProperties { get; set; }
+
+    private object? Properties { get; set; }
+
+    private string Class { get; set; } = "";
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        Properties.Variant = ButtonVariant.Primary;
-        Properties.Content = "Button";
-        Properties.Outline = false;
-    }
+        EditProperties =
+            new ButtonProperties
+            {
+                Variant = ButtonVariant.Primary,
+                Content = "Button"
+            };
 
-    private void HandleStyleUpdate(
-        string style)
-    {
-        ButtonClass = style;
+        Properties = EditProperties;
     }
 }

@@ -1,12 +1,16 @@
 # InputText
 
-InputText component provides a single-line text input. It renders either as `<input type="text" class="form-control">`.
+InputText component provides a single-line text input. It renders as `<input type="text">`.
 
 ## Markup
+
+Blazor:
 
 ```razor
 <InputText />
 ```
+
+HTML result:
 
 ```html
 <input type="text" class="form-control">
@@ -27,7 +31,7 @@ Parameters:
 | `Value`           | `string`                | The initial value.                                    |
 | `ValueChanged`    | `EventCallback<string>` | Raised when value is updated on input.                |
 
-Unmatched parameters will be added as HTML tag attributes.
+Unmatched parameters will be added as HTML attributes.
 
 ## See also
 

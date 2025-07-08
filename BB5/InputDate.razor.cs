@@ -23,14 +23,14 @@ public partial class InputDate
     public ComponentSize Size { get; set; }
 
     [Parameter]
-    public string Class { get; set; } = "";
-    
-    [Parameter]
     public bool ReadOnly { get; set; }
     
     [Parameter]
     public bool Disabled { get; set; }
 
+    [Parameter]
+    public string Class { get; set; } = "";
+    
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
 

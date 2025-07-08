@@ -4,9 +4,13 @@ InputTextArea component provides a multi-line text input. It renders as `<textar
 
 ## Markup
 
+Blazor:
+
 ```razor
 <InputText Rows="3" />
 ```
+
+HTML result:
 
 ```html
 <textarea class="form-control"></textarea>
@@ -27,7 +31,7 @@ Parameters:
 | `Value`           | `string`                | The initial value.                                    |
 | `ValueChanged`    | `EventCallback<string>` | Raised when value is updated on input.                |
 
-Unmatched parameters will be added as HTML tag attributes.
+Unmatched parameters will be added as HTML attributes.
 
 ## See also
 

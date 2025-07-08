@@ -114,7 +114,8 @@ public class FormControlModel
         var nullability =
             nullabilityContext.Create(propertyInfo);
         var isRequiredReferenceType =
-            nullability.ReadState == NullabilityState.NotNull;
+            nullability.ReadState == NullabilityState.NotNull
+            && propertyType != typeof(string);
 
         var requiredAttribute =
             propertyInfo
@@ -200,8 +201,15 @@ public class FormControlModel
     {
         ValidationFeedback = "";
         ValidationState = ValidationState.None;
-        ModifiedText = value;
+        
+        var modified =
+            !string.Equals(
+                ModifiedText,
+                value,
+                StringComparison.Ordinal);
 
+        ModifiedText = value;
+        
         if (IsRequired
             && string.IsNullOrEmpty(value))
         {
@@ -223,6 +231,9 @@ public class FormControlModel
             }
         }
 
+        if (!modified)
+            return;
+
         if (PropertyInfo.PropertyType.IsEnum)
         {
             PropertyInfo.SetValue(
@@ -230,6 +241,15 @@ public class FormControlModel
                 Enum.Parse(
                     PropertyInfo.PropertyType,
                     value));
+        }
+
+        if (typeof(bool) == PropertyInfo.PropertyType)
+        {
+            var typeValue = value == "on";
+
+            PropertyInfo.SetValue(
+                ModifiedObject,
+                typeValue);
         }
 
         if (typeof(int) == PropertyInfo.PropertyType)
@@ -391,8 +411,9 @@ public class FormControlModel
 
         if (typeof(bool) == propertyInfo.PropertyType)
         {
-            var propertyValue = propertyInfo.GetValue(@object) is true;
-            return Convert.ToString(propertyValue, CultureInfo.InvariantCulture);
+            return propertyInfo.GetValue(@object) is true
+                ? "on"
+                : "off";
         }
 
         if (typeof(int) == propertyInfo.PropertyType)
@@ -466,7 +487,4 @@ public partial class FormControl
 {
     [Parameter]
     public FormControlModel? Model { get; set; }
-
-    [Parameter]
-    public EventCallback<object?> Modified { get; set; }
 }

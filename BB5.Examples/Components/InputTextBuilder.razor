@@ -2,15 +2,20 @@
 
 <div class="row">
     <div class="col-4">
-        <Form Object="Properties"
-              Modified="@(() => StateHasChanged())" />
-        <ClassBuilder OnClassUpdated="HandleStyleUpdate"/>
+        <Form Object="@EditProperties"
+              Submitted="@(ctx => Properties = ctx.Object)"
+              AutoSubmit="@true" />
+        <ClassBuilder OnClassUpdated="@(value => Class = value)" />
     </div>
     <div class="col-8">
         <div class="m-3">
-            <BB5.InputText Size="@Properties.Size"
-                           Class="@InputTextClass"
-                           ReadOnly="@Properties.ReadOnly" />
+            @{ var properties =
+                   Properties as InputTextProperties
+                   ?? new(); }
+            <BB5.InputText Size="@properties.Size"
+                           Placeholder="@properties.Placeholder"
+                           Class="@Class"
+                           ReadOnly="@properties.ReadOnly" />
         </div>
     </div>
 </div>

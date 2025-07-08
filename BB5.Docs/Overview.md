@@ -1,6 +1,6 @@
 # Overview
 
-BB5 is a component library for Blazor, designed with Bootstrap 5.
+BB5 is a Blazor component library, designed with Bootstrap 5.
 
 ## Examples
 
@@ -14,9 +14,12 @@ BB5 is a component library for Blazor, designed with Bootstrap 5.
 
 ## Components
 
+- [Alert](./Components/Alert.md)
+- [Badge](./Components/Badge.md)
 - [Form](./Components/Form.md)
 - [FormControl](./Components/FormControl.md)
 - [InputText](./Components/InputText.md)
+- [Table](./Components/Table.md)
 
 ## Frameworks
 

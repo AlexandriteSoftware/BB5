@@ -23,16 +23,21 @@ public partial class InputText
     public ComponentSize Size { get; set; }
 
     [Parameter]
-    public string Class { get; set; } = "";
-    
-    [Parameter]
     public bool ReadOnly { get; set; }
     
     [Parameter]
     public bool Disabled { get; set; }
+    
+    [Parameter]
+    public string? Placeholder { get; set; }
 
+    [Parameter]
+    public string Class { get; set; } = "";
+    
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
+    
+    private Dictionary<string, object?>? InputAttributes { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -78,22 +83,24 @@ public partial class InputText
                     StringSplitOptions.RemoveEmptyEntries));
         }
 
-        Attributes ??= [];
+        InputAttributes = [];
 
         if (!string.IsNullOrEmpty(Id))
-            Attributes["id"] = Id;
-        else
-            Attributes.Remove("id");
+            InputAttributes["id"] = Id;
         
         if (ReadOnly)
-            Attributes["readonly"] = "readonly";
-        else
-            Attributes.Remove("readonly");
+            InputAttributes["readonly"] = "readonly";
         
-        Attributes["class"] =
-            string.Join(
-                " ",
-                classes);
+        if (!string.IsNullOrEmpty(Placeholder))
+            InputAttributes["placeholder"] = Placeholder;
+
+        if (classes.Count > 0)
+        {
+            InputAttributes["class"] =
+                string.Join(
+                    " ",
+                    classes);
+        }
     }
 
     private async Task HandleInputAsync(

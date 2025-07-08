@@ -2,9 +2,12 @@
 
 Dismissible message panel that provides feedback to the user.
 
-See the [Bootstrap documentation](https://getbootstrap.com/docs/5.3/components/alerts/) for more details.
+See the [Bootstrap documentation](https://getbootstrap.com/docs/5.3/components/alerts/)
+for more details.
 
 ## Example
+
+Blazor:
 
 ```razor
 <Alert Color="AlertColor.Success"
@@ -12,6 +15,8 @@ See the [Bootstrap documentation](https://getbootstrap.com/docs/5.3/components/a
        Dismissible="@true"
        Content="@((MarkupString)"<b>Success!</b>")" />
 ```
+
+HTML result:
 
 ```html
 <div class="alert alert-success" role="alert">

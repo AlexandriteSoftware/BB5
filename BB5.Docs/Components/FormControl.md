@@ -1,10 +1,10 @@
 # FormControl
 
-FormControl is a component that generates a form control for a property of an object.
+FormControl generates a form control for the object's property.
 
 ```razor
-<FormControl Object="Model"
-             Property="nameof(Model.Name)"
+<FormControl Object="@user"
+             Property="nameof(User.Name)"
              ValueUpdated="..." />
 ```
 
@@ -21,10 +21,10 @@ Example of the FormControl structure for string property:
 
 ## Parameters
 
-FormControl's parameters are used to configure the control. They are initialised
-from object's property attributes and type.
+FormControl's parameters configures the control's view and behaviour.
+They are initialised from object's property attributes and type.
 
-When the attribute `[CopyAttributesFrom]` si present, the builder looks for
+When the attribute `[CopyAttributesFrom]` is present, the builder looks for
 the attributes applied to the referenced property's type.
 
 ### `Title`

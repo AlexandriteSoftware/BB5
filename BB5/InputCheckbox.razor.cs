@@ -8,10 +8,10 @@ namespace BB5;
 public partial class InputCheckbox
 {
     [Parameter]
-    public bool Value { get; set; }
+    public string Value { get; set; } = "";
 
     [Parameter]
-    public EventCallback<bool> ValueChanged { get; set; }
+    public EventCallback<string> ValueChanged { get; set; }
 
     [Parameter]
     public ValidationState ValidationState { get; set; }
@@ -85,6 +85,8 @@ public partial class InputCheckbox
     {
         await ValueChanged
             .InvokeAsync(
-                e.Value is true);
+                e.Value is true
+                    ? "on"
+                    : "off");
     }
 }

@@ -4,11 +4,13 @@ public class TableProperties;
 
 public partial class TableBuilder
 {
-    private TableProperties Properties { get; set; } = new();
+    private object? EditProperties { get; set; }
 
-    private string? TableClass { get; set; } = "";
+    private object? Properties { get; set; }
 
-    private object? TableItems { get; set; } =
+    private string Class { get; set; } = "";
+
+    private object? Items { get; set; } =
         new[]
         {
             new { Id = 1, Name = "Item 1", Description = "Description for Item 1" },
@@ -20,12 +22,9 @@ public partial class TableBuilder
     {
         base.OnInitialized();
 
-        TableClass = "";
-    }
-    
-    private void HandleStyleUpdate(
-        string style)
-    {
-        TableClass = style;
+        EditProperties =
+            new TableProperties();
+        
+        Properties = EditProperties;
     }
 }

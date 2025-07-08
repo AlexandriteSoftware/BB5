@@ -10,13 +10,19 @@ public class InputTextAreaProperties
 
 public partial class InputTextAreaBuilder
 {
-    private InputTextAreaProperties Properties { get; set; } = new();
+    private object? EditProperties { get; set; }
 
-    private string? InputTextAreaClass { get; set; } = "";
+    private object? Properties { get; set; }
 
-    private void HandleStyleUpdate(
-        string style)
+    private string Class { get; set; } = "";
+
+    protected override void OnInitialized()
     {
-        InputTextAreaClass = style;
+        base.OnInitialized();
+
+        EditProperties =
+            new InputTextAreaProperties();
+
+        Properties = EditProperties;
     }
 }

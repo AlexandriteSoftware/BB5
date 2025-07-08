@@ -12,11 +12,13 @@ public class SelectProperties
 
 public partial class SelectBuilder
 {
-    private SelectProperties Properties { get; set; } = new();
+    private object? EditProperties { get; set; }
 
-    private string? SelectClass { get; set; } = "";
+    private object? Properties { get; set; }
 
-    private object? SelectItems { get; set; } =
+    private string Class { get; set; } = "";
+
+    private object? Items { get; set; } =
         new[]
         {
             "Item 1",
@@ -28,12 +30,9 @@ public partial class SelectBuilder
     {
         base.OnInitialized();
 
-        SelectClass = "";
-    }
-    
-    private void HandleStyleUpdate(
-        string style)
-    {
-        SelectClass = style;
+        EditProperties =
+            new SelectProperties();
+        
+        Properties = EditProperties;
     }
 }

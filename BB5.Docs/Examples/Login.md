@@ -78,7 +78,7 @@ private Task HandleSubmitAsync(
     // simulate a login check
     
     if (model.Email != "user@local"
-        && model.Password != "secret")
+        || model.Password != "secret")
     {
         context.Errors.Add(
             new ValidationResult(
