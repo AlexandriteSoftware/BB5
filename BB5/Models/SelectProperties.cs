@@ -8,4 +8,8 @@ public class SelectProperties
     public int Rows { get; set; } = 4;
     
     public bool Multiple { get; set; } = false;
+
+    public bool ReadOnly { get; set; }
+
+    public bool Disabled { get; set; }
 }

@@ -1,0 +1,21 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+<BB5.Form Object="@Model"
+          AutoSubmit="@true" />
+
+
+@code {
+    public class FormControlsExampleFormModel
+    {
+        [EmailAddress(
+            ErrorMessage =
+                "The Email field is not a valid e-mail address.")]
+        [InputTextPlaceholder("name@example.com")]
+        public string Email { get; set; } = "";
+
+        [TextArea]
+        public string Notes { get; set; } = "";
+    }
+    
+    private FormControlsExampleFormModel Model { get; set; } = new();
+}

@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace BB5.Models;
 
+/// <summary>
+///     Supported types of the Input control.
+/// </summary>
+/// <remarks>
+///     See https://html.spec.whatwg.org/multipage/input.html#states-of-the-type-attribute
+/// </remarks>
 public enum InputType
 {
     Text,
@@ -63,8 +69,9 @@ public class FormControlModel
     public ValidationState ValidationState { get; set; }
     
     public LabelProperties? LabelProperties { get; set; }
-    public object? ControlProperties { get; set; }
 
+    public object? ControlProperties { get; set; }
+    
     public static IList<FormControlModel> From(
         object @object,
         object modifiedObject,
@@ -215,6 +222,7 @@ public class FormControlModel
         {
             if (propertyInfo.GetCustomAttribute<InputTextPlaceholderAttribute>() is { } placeholderAttribute)
                 inputTextProperties.Placeholder = placeholderAttribute.Text;
+            inputTextProperties.ReadOnly = isReadOnly;
         }
 
         if (controlProperties is ISizeableComponent sizeableComponent)

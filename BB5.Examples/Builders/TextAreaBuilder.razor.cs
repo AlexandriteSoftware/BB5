@@ -1,8 +1,8 @@
 ﻿using BB5.Models;
 
-namespace BB5.Examples.Components;
+namespace BB5.Examples.Builders;
 
-public partial class LabelBuilder
+public partial class TextAreaBuilder
 {
     private object? EditProperties { get; set; }
 
@@ -15,10 +15,7 @@ public partial class LabelBuilder
         base.OnInitialized();
 
         EditProperties =
-            new LabelProperties
-            {
-                Content = "Label"
-            };
+            new TextAreaProperties();
 
         Properties = EditProperties;
     }

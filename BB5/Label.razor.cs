@@ -69,6 +69,14 @@ public partial class Label
                     " ",
                     classes);
         }
-
+        
+        if (Attributes is { } attributes)
+        {
+            foreach (var attribute in attributes)
+            {
+                LabelAttributes[attribute.Key] =
+                    attribute.Value;
+            }
+        }
     }
 }

@@ -37,7 +37,7 @@ public partial class InputText
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
     
-    private Dictionary<string, object?>? InputAttributes { get; set; }
+    private Dictionary<string, object?>? ElementAttributes { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -83,23 +83,35 @@ public partial class InputText
                     StringSplitOptions.RemoveEmptyEntries));
         }
 
-        InputAttributes = [];
+        ElementAttributes = [];
 
         if (!string.IsNullOrEmpty(Id))
-            InputAttributes["id"] = Id;
+            ElementAttributes["id"] = Id;
         
         if (ReadOnly)
-            InputAttributes["readonly"] = "readonly";
+            ElementAttributes["readonly"] = "readonly";
+        
+        if (Disabled)
+            ElementAttributes["disabled"] = "disabled";
         
         if (!string.IsNullOrEmpty(Placeholder))
-            InputAttributes["placeholder"] = Placeholder;
+            ElementAttributes["placeholder"] = Placeholder;
 
         if (classes.Count > 0)
         {
-            InputAttributes["class"] =
+            ElementAttributes["class"] =
                 string.Join(
                     " ",
                     classes);
+        }
+        
+        if (Attributes is { } attributes)
+        {
+            foreach (var attribute in attributes)
+            {
+                ElementAttributes[attribute.Key] =
+                    attribute.Value;
+            }
         }
     }
 

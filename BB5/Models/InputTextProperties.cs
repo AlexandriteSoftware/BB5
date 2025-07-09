@@ -8,4 +8,6 @@ public class InputTextProperties
     public ComponentSize Size { get; set; }
     
     public bool ReadOnly { get; set; }
+    
+    public bool Disabled { get; set; }
 }

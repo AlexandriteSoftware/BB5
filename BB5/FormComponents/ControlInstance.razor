@@ -1,13 +1,15 @@
-﻿using BB5.Models;
-using Microsoft.AspNetCore.Components;
+﻿@using BB5.Models
 
-namespace BB5;
-
-public partial class FormControl
+@if (Template is not null
+     && Model is not null)
 {
+    @Template(Model)
+}
+
+@code {
     [Parameter]
     public FormControlModel? Model { get; set; }
-    
-    [Parameter]
+
+    [CascadingParameter]
     public RenderFragment<FormControlModel>? Template { get; set; }
 }

@@ -1,0 +1,45 @@
+﻿@using BB5.Models
+@using BB5.FormComponents
+
+<BB5.Form Object="@Model"
+          ModelCreated="@(model =>
+                        {
+                            if (model.Get("Disabled") is
+                                {
+                                    ControlProperties: InputTextProperties controlDisabled
+                                })
+                            {
+                                controlDisabled.Disabled = true;
+                            }
+
+                            if (model.Get("DisabledReadOnly") is
+                                {
+                                    ControlProperties: InputTextProperties controlDisabledReadOnly
+                                })
+                            {
+                                controlDisabledReadOnly.ReadOnly = true;
+                                controlDisabledReadOnly.Disabled = true;
+                            }
+
+                        })"
+          AutoSubmit="@true">
+    <ControlTemplate>
+        <div class="mt-3">
+            <InputPlaceholder />
+            <FeedbackPlaceholder />
+        </div>
+    </ControlTemplate>
+</BB5.Form>
+
+@code {
+    public class FormControlsDisabledFormModel
+    {
+        [InputTextPlaceholder("Disabled input")]
+        public string Disabled { get; set; } = "";
+
+        [InputTextPlaceholder("Disabled readonly input")]
+        public string DisabledReadOnly { get; set; } = "";
+    }
+    
+    private FormControlsDisabledFormModel Model { get; set; } = new();
+}

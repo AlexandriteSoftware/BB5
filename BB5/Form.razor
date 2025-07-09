@@ -1,4 +1,5 @@
-﻿<form @onsubmit:preventDefault
+﻿@using BB5.FormComponents
+<form @onsubmit:preventDefault
       @onsubmit="HandleSubmitAsync"
       @attributes="@FormAttributes">
     @if (!string.IsNullOrEmpty(Error))
@@ -10,7 +11,15 @@
                Dismissed="@(() => Error = null)"/>
     }
 
-    @GetControlsTemplate()(Model.ToList())
+    <CascadingValue Value="Model">
+        <CascadingValue Value="EffectiveControlsTemplate">
+            <CascadingValue Value="EffectiveControlTemplate">
+                <ControlsInstance />
+            </CascadingValue>
+        </CascadingValue>
+    </CascadingValue>
+
+    <!-- GetControlsTemplate()(Model.ToList()) -->
 
     @if (Actions != null || !AutoSubmit)
     {

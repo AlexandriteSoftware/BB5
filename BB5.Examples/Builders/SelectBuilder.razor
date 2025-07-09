@@ -1,0 +1,25 @@
+﻿@using BB5
+@using BB5.Models
+
+<div class="row">
+    <div class="col-4">
+        <BB5.Form Object="@EditProperties"
+                  Submitted="@(ctx => Properties = ctx.Object)"
+                  AutoSubmit="@true" />
+        <ClassBuilder OnClassUpdated="@(value => Class = value)" />
+    </div>
+    <div class="col-8">
+        <div class="m-3">
+            @{ var properties =
+                   Properties as SelectProperties
+                   ?? new(); }
+            <BB5.Select Class="@Class"
+                        Size="@properties.Size"
+                        Rows="@properties.Rows"
+                        Multiple="@properties.Multiple"
+                        Disabled="@properties.Disabled"
+                        ReadOnly="@properties.ReadOnly"
+                        Items="@Items" />
+        </div>
+    </div>
+</div>

@@ -1,245 +1,288 @@
 ﻿@using BB5.Models
+@using BB5.FormComponents
+
 @{
-    if (Model is not { } model)
+    if (Model == null)
         return;
-
-    var property = model.PropertyInfo;
 }
 
-@if (model.HasLabel)
-{
-    var properties =
-        model.LabelProperties
-        ?? new();
+<CascadingValue Name="Label" Value="Label">
+    <CascadingValue Name="InputControl" Value="InputControl">
+        <CascadingValue Name="Feedback" Value="Feedback">
+            <CascadingValue Name="Text" Value="Text">
+                @if (Template is not null
+                     && Model is not null)
+                {
+                    @Template(Model)
+                }
+            </CascadingValue>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>
 
-    <BB5.Label Content="@model.DisplayName"
-               Size="@properties.Size"
-               For="@model.Id" />
-}
+@code {
 
-@if (property.PropertyType.IsEnum)
-{
-    var properties =
-        model.ControlProperties as SelectProperties
-        ?? new();
-
-    <BB5.Select Value="@model.Text"
-                Items="@(Enum.GetNames(property.PropertyType))"
-                Size="@properties.Size"
-                ValueChanged="model.SetTextAsync"
-                Id="@model.Id" />
-}
-
-@if (typeof(bool) == property.PropertyType)
-{
-    <BB5.InputCheckbox Id="@model.Id"
-                       Value="@model.Text"
-                       ValueChanged="@model.SetTextAsync" />
-    <CheckLabel Content="@model.DisplayName"
-                     For="@model.Id" />
-}
-
-@if (typeof(int) == property.PropertyType)
-{
-    var properties =
-        model.ControlProperties as InputTextProperties
-        ?? new();
-
-    @if (model.IsReadOnly)
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   Readonly="@true"/>
-    }
-    else
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetTextAsync" />
-    }
-}
-
-@if (typeof(int?) == property.PropertyType)
-{
-    var properties =
-        model.ControlProperties as InputTextProperties
-        ?? new();
-
-    @if (model.IsReadOnly)
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   Readonly="@true" />
-    }
-    else
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetTextAsync" />
-    }
-}
-
-@if (typeof(decimal) == property.PropertyType)
-{
-    var properties =
-        model.ControlProperties as InputTextProperties
-        ?? new();
-
-    @if (model.IsReadOnly)
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   Readonly="@true" />
-    }
-    else
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetTextAsync" />
-    }
-}
-
-@if (typeof(decimal?) == property.PropertyType)
-{
-    var properties =
-        model.ControlProperties as InputTextProperties
-        ?? new();
-
-    @if (model.IsReadOnly)
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   Readonly="@true"/>
-    }
-    else
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetTextAsync" />
-    }
-}
-
-@if (typeof(string) == property.PropertyType)
-{
-    if (model.IsPassword)
-    {
-        var properties =
-            model.ControlProperties as InputPasswordProperties
-            ?? new();
-
-        <InputPassword Id="@model.Id"
-                       Size="@properties.Size"
-                       ValidationState="@model.ValidationState"
-                       ValueChanged="@model.SetTextAsync" />
-    }
-    else if (model.IsTextArea)
-    {
-        @if (model.IsReadOnly)
+    private RenderFragment Label =>
+        builder =>
         {
-            <BB5.TextArea Id="@model.Id"
-                          Value="@model.Text"
-                          Readonly="@true" />
-        }
-        else
+            if (Model is not { } model)
+                return;
+
+            @if (!model.HasLabel)
+                return;
+
+            var properties =
+                model.LabelProperties
+                ?? new();
+
+            builder.OpenComponent(0, typeof(Label));
+            builder.AddAttribute(1, "Content", model.DisplayName);
+            builder.AddAttribute(2, "Size", properties.Size);
+            builder.AddAttribute(3, "For", model.Id);
+            builder.CloseComponent();
+        };
+    
+    private RenderFragment Text =>
+        builder =>
         {
-            <BB5.TextArea Id="@model.Id"
-                          Value="@model.Text"
-                          ValidationState="@model.ValidationState"
-                          ValueChanged="@model.SetTextAsync" />
-        }        
-    }
-    else
-    {
-        var properties =
-            model.ControlProperties as InputTextProperties
-            ?? new();
+            if (Model is not { } model)
+                return;
 
-        @if (model.IsReadOnly)
+            @if (!string.IsNullOrEmpty(model.Description))
+            {
+                builder.OpenElement(0, "div");
+                builder.AddAttribute(1, "class", "form-text");
+                builder.AddContent(2, model.Description);
+                builder.CloseElement();
+            }
+        };
+    
+    private RenderFragment InputControl =>
+        builder =>
         {
-            <InputText Id="@model.Id"
-                       Value="@model.Text"
-                       Size="@properties.Size"
-                       Readonly="@true"/>
-        }
-        else
+            if (Model is not { } model)
+                return;
+
+            var property = model.PropertyInfo;
+
+            var type = property.PropertyType;
+
+            var seq = 0;
+
+            if (type.IsEnum)
+            {
+                var properties = model.ControlProperties as SelectProperties ?? new();
+                builder.OpenComponent(++seq, typeof(Select));
+                builder.AddAttribute(++seq, "Value", model.Text);
+                builder.AddAttribute(++seq, "Items", Enum.GetNames(type));
+                builder.AddAttribute(++seq, "Size", properties.Size);
+                builder.AddAttribute(
+                    ++seq,
+                    "ValueChanged",
+                    EventCallback.Factory.Create<string>(
+                        this,
+                        model.SetTextAsync));
+                builder.AddAttribute(++seq, "Id", model.Id);
+                builder.CloseComponent();
+                return;
+            }
+
+            if (type == typeof(bool))
+            {
+                builder.OpenComponent(++seq, typeof(InputCheckbox));
+                builder.AddAttribute(++seq, "Id", model.Id);
+                builder.AddAttribute(++seq, "Value", model.Text);
+                builder.AddAttribute(
+                    ++seq,
+                    "ValueChanged",
+                    EventCallback.Factory.Create<string>(
+                        this,
+                        model.SetTextAsync));
+                builder.CloseComponent();
+
+                builder.OpenComponent(++seq, typeof(CheckLabel));
+                builder.AddAttribute(++seq, "Content", model.DisplayName);
+                builder.AddAttribute(++seq, "For", model.Id);
+                builder.CloseComponent();
+                return;
+            }
+
+            var nonNullableType =
+                Nullable.GetUnderlyingType(type)
+                ?? type;
+
+            if (nonNullableType == typeof(int)
+                || nonNullableType == typeof(decimal))
+            {
+                var properties = model.ControlProperties as InputTextProperties ?? new();
+                var isReadOnly = model.IsReadOnly;
+
+                builder.OpenComponent(++seq, typeof(InputText));
+                builder.AddAttribute(++seq, "Id", model.Id);
+                builder.AddAttribute(++seq, "Value", model.Text);
+                builder.AddAttribute(++seq, "Size", properties.Size);
+
+                if (isReadOnly)
+                {
+                    builder.AddAttribute(++seq, "Readonly", true);
+                }
+                else
+                {
+                    builder.AddAttribute(
+                        ++seq,
+                        "ValidationState",
+                        model.ValidationState);
+
+                    builder.AddAttribute(
+                        ++seq,
+                        "ValueChanged",
+                        EventCallback.Factory.Create<string>(
+                            this,
+                            model.SetTextAsync));
+                }
+
+                builder.CloseComponent();
+                return;
+            }
+
+            if (nonNullableType == typeof(DateOnly))
+            {
+                var properties = model.ControlProperties as InputDateProperties ?? new();
+                var isReadOnly = model.IsReadOnly;
+
+                builder.OpenComponent(++seq, isReadOnly ? typeof(InputText) : typeof(InputDate));
+                builder.AddAttribute(++seq, "Id", model.Id);
+                builder.AddAttribute(++seq, "Value", model.Text);
+                builder.AddAttribute(++seq, "Size", properties.Size);
+                if (isReadOnly)
+                {
+                    builder.AddAttribute(++seq, "Readonly", true);
+                }
+                else
+                {
+                    builder.AddAttribute(
+                        ++seq,
+                        "ValidationState",
+                        model.ValidationState);
+
+                    builder.AddAttribute(
+                        ++seq,
+                        "ValueChanged",
+                        EventCallback.Factory.Create<string>(
+                            this,
+                            model.SetTextAsync));
+                }
+
+                builder.CloseComponent();
+                return;
+            }
+
+            if (type == typeof(string))
+            {
+                if (model.IsPassword)
+                {
+                    var inputPasswordProperties =
+                        model.ControlProperties as InputPasswordProperties
+                        ?? new();
+
+                    builder.OpenComponent(++seq, typeof(InputPassword));
+                    builder.AddAttribute(++seq, "Id", model.Id);
+                    builder.AddAttribute(++seq, "Size", inputPasswordProperties.Size);
+                    builder.AddAttribute(++seq, "ValidationState", model.ValidationState);
+
+                    builder.AddAttribute(
+                        ++seq,
+                        "ValueChanged",
+                        EventCallback.Factory.Create<string>(
+                            this,
+                            model.SetTextAsync));
+                    builder.CloseComponent();
+                    return;
+                }
+
+                if (model.IsTextArea)
+                {
+                    var textAreaProperties =
+                        model.ControlProperties as TextAreaProperties
+                        ?? new();
+
+                    builder.OpenComponent(++seq, typeof(TextArea));
+                    builder.AddAttribute(++seq, "Id", model.Id);
+                    builder.AddAttribute(++seq, "Value", model.Text);
+                    builder.AddAttribute(++seq, "Disabled", textAreaProperties.Disabled);
+                    if (model.IsReadOnly)
+                    {
+                        builder.AddAttribute(++seq, "Readonly", true);
+                    }
+                    else
+                    {
+                        builder.AddAttribute(++seq, "ValidationState", model.ValidationState);
+                        builder.AddAttribute(
+                            ++seq,
+                            "ValueChanged",
+                            EventCallback.Factory.Create<string>(
+                                this,
+                                model.SetTextAsync));
+                    }
+
+                    builder.CloseComponent();
+                    return;
+                }
+
+                var inputTextProperties =
+                    model.ControlProperties as InputTextProperties
+                    ?? new();
+
+                builder.OpenComponent(++seq, typeof(InputText));
+                builder.AddAttribute(++seq, "Id", model.Id);
+                builder.AddAttribute(++seq, "Value", model.Text);
+                builder.AddAttribute(++seq, "Size", inputTextProperties.Size);
+                builder.AddAttribute(++seq, "Disabled", inputTextProperties.Disabled);
+                builder.AddAttribute(++seq, "Placeholder", inputTextProperties.Placeholder);
+
+                if (inputTextProperties.ReadOnly)
+                    builder.AddAttribute(++seq, "Readonly", true);
+                
+                
+                if (!inputTextProperties.ReadOnly)
+                {
+                    builder.AddAttribute(++seq, "ValidationState", model.ValidationState);
+
+                    builder.AddAttribute(
+                        ++seq,
+                        "ValueChanged",
+                        EventCallback.Factory.Create<string>(
+                            this,
+                            model.SetTextAsync));
+                }
+
+                builder.CloseComponent();
+                return;
+            }
+
+            if (model.HasFeedback)
+            {
+                builder.OpenComponent(++seq, typeof(Feedback));
+                builder.AddAttribute(++seq, "Content", model.ValidationFeedback);
+                builder.AddAttribute(++seq, "ValidationState", model.ValidationState);
+                builder.CloseComponent();
+            }
+        };
+
+    private RenderFragment Feedback =>
+        builder =>
         {
-            <InputText Id="@model.Id"
-                       Value="@model.Text"
-                       Size="@properties.Size"
-                       Placeholder="@properties.Placeholder"
-                       ValidationState="@model.ValidationState"
-                       ValueChanged="@model.SetTextAsync" />
-        }
-    }
-}
+            if (Model is not { } model)
+                return;
 
-@if (typeof(DateOnly) == property.PropertyType)
-{
-    var properties =
-        model.ControlProperties as InputDateProperties
-        ?? new();
+            var seq = 0;
 
-    @if (model.IsReadOnly)
-    {
-        <InputText Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   Readonly="@true" />
-    }
-    else
-    {
-        <InputDate Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetTextAsync" />
-    }
-}
-
-@if (typeof(DateOnly?) == property.PropertyType)
-{
-    var properties =
-        model.ControlProperties as InputDateProperties
-        ?? new();
-
-    @if (model.IsReadOnly)
-    {
-        <InputDate Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   Readonly="@true"/>
-    }
-    else
-    {
-        <InputDate Id="@model.Id"
-                   Value="@model.Text"
-                   Size="@properties.Size"
-                   ValidationState="@model.ValidationState"
-                   ValueChanged="@model.SetTextAsync" />
-    }
-}
-
-@if (model.HasFeedback)
-{
-    <Feedback Content="@model.ValidationFeedback"
-              ValidationState="@model.ValidationState"/>
-}
-
-@if (!string.IsNullOrEmpty(model.Description))
-{
-    <div class="form-text">
-        @model.Description
-    </div>
+            if (model.HasFeedback)
+            {
+                builder.OpenComponent(++seq, typeof(Feedback));
+                builder.AddAttribute(++seq, "Content", model.ValidationFeedback);
+                builder.AddAttribute(++seq, "ValidationState", model.ValidationState);
+                builder.CloseComponent();
+            }
+        };
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace BB5.Examples.Components;
+namespace BB5.Examples.Builders;
 
 public partial class ClassBuilder
 {

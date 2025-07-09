@@ -1,6 +1,6 @@
 ﻿using BB5.Models;
 
-namespace BB5.Examples.Components;
+namespace BB5.Examples.Builders;
 
 public partial class InputPasswordBuilder
 {

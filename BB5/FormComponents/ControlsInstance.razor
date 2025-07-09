@@ -1,0 +1,15 @@
+﻿@using BB5.Models
+
+@if (Model is not null
+     && ControlsTemplate is not null)
+{
+    @ControlsTemplate(Model)
+}
+
+@code {
+    [CascadingParameter]
+    public FormModel? Model { get; set; }
+
+    [CascadingParameter]
+    public RenderFragment<FormModel>? ControlsTemplate { get; set; }
+}

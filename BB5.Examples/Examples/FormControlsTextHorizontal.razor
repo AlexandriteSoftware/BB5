@@ -1,0 +1,31 @@
+﻿@using System.ComponentModel
+@using BB5.FormComponents
+
+<BB5.Form Object="@Model"
+          AutoSubmit="@true">
+    <ControlTemplate>
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <LabelPlaceholder/>
+            </div>
+            <div class="col-auto">
+                <InputPlaceholder/>
+                <FeedbackPlaceholder/>
+            </div>
+            <div class="col-auto">
+                <TextPlaceholder/>
+            </div>
+        </div>
+    </ControlTemplate>
+</BB5.Form>
+
+@code {
+    public class FormControlsTextHorizontalFormModel
+    {
+        [PasswordPropertyText]
+        [Description("Choosing a complex password is important step in keeping your account secure.")]
+        public string Password { get; set; } = "";
+    }
+    
+    private FormControlsTextHorizontalFormModel Model { get; set; } = new();
+}

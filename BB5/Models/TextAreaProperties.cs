@@ -6,4 +6,6 @@ public class TextAreaProperties
         ComponentSize.Default;
     
     public bool ReadOnly { get; set; } = false;
+    
+    public bool Disabled { get; set; }
 }

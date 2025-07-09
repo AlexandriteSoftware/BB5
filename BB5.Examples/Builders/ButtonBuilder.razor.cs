@@ -1,20 +1,18 @@
 ﻿using System.ComponentModel;
 
-namespace BB5.Examples.Components;
+namespace BB5.Examples.Builders;
 
-public class AlertProperties
+public class ButtonProperties
 {
-    public AlertColor Color { get; set; }
-
+    public ButtonVariant Variant { get; set; }
     public string Content { get; set; } = "";
-    
+
     [DisplayName("Content is markup (HTML)")]
     public bool ContentIsMarkup { get; set; } = false;
-
-    public bool Dismissible { get; set; }
+    public bool Outline { get; set; }
 }
 
-public partial class AlertBuilder
+public partial class ButtonBuilder
 {
     private object? EditProperties { get; set; }
 
@@ -27,11 +25,10 @@ public partial class AlertBuilder
         base.OnInitialized();
 
         EditProperties =
-            new AlertProperties
+            new ButtonProperties
             {
-                Color = AlertColor.Primary,
-                Content = "This is an alert.",
-                Dismissible = false
+                Variant = ButtonVariant.Primary,
+                Content = "Button"
             };
 
         Properties = EditProperties;

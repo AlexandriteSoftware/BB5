@@ -1,0 +1,20 @@
+﻿@using BB5.FormComponents
+
+<BB5.Form Object="@Model"
+          AutoSubmit="@true">
+    <ControlTemplate>
+        <div class="mt-3">
+            <InputPlaceholder />
+            <FeedbackPlaceholder />
+        </div>
+    </ControlTemplate>
+</BB5.Form>
+
+@code {
+    public class FormControlsReadOnlyFormModel
+    {
+        public string ReadOnly { get; } = "This value is read-only";
+    }
+    
+    private FormControlsReadOnlyFormModel Model { get; set; } = new();
+}

@@ -7,4 +7,6 @@ public class InputPasswordProperties
         ComponentSize.Default;
     
     public bool ReadOnly { get; set; } = false;
+    
+    public bool Disabled { get; set; }
 }

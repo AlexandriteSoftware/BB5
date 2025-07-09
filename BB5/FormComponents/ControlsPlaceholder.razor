@@ -1,0 +1,21 @@
+﻿@using BB5.Models
+
+@if (Model is not null
+    && ControlTemplate is not null)
+{
+    @foreach (var model in Model?.ToList() ?? [])
+    {
+        <FormControl Model="@model"
+                     Template="@ControlTemplate" />
+    }
+}
+
+@code {
+
+    [CascadingParameter]
+    public FormModel? Model { get; set; }
+
+    [CascadingParameter]
+    public RenderFragment<FormControlModel>? ControlTemplate { get; set; }
+
+}

@@ -1,8 +1,8 @@
 ﻿using BB5.Models;
 
-namespace BB5.Examples.Components;
+namespace BB5.Examples.Builders;
 
-public partial class TextAreaBuilder
+public partial class SelectBuilder
 {
     private object? EditProperties { get; set; }
 
@@ -10,13 +10,21 @@ public partial class TextAreaBuilder
 
     private string Class { get; set; } = "";
 
+    private object? Items { get; set; } =
+        new[]
+        {
+            "Item 1",
+            "Item 2",
+            "Item 3"
+        };
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         EditProperties =
-            new TextAreaProperties();
-
+            new SelectProperties();
+        
         Properties = EditProperties;
     }
 }

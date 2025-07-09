@@ -1,21 +1,21 @@
 ﻿using BB5.Models;
 
-namespace BB5.Examples.Components;
+namespace BB5.Examples.Builders;
 
-public partial class InputDateBuilder
+public partial class InputTextBuilder
 {
     private object? EditProperties { get; set; }
 
     private object? Properties { get; set; }
 
     private string Class { get; set; } = "";
-    
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         EditProperties =
-            new InputDateProperties();
+            new InputTextProperties();
 
         Properties = EditProperties;
     }

@@ -32,10 +32,12 @@ public partial class TextArea
     public bool Disabled { get; set; }
 
     [Parameter]
-    public int Rows { get; set; } = 1;
+    public int? Rows { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Attributes { get; set; }
+
+    private Dictionary<string, object?>? ElementAttributes { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -81,27 +83,33 @@ public partial class TextArea
                     StringSplitOptions.RemoveEmptyEntries));
         }
 
-        Attributes ??= [];
-
-        if (!string.IsNullOrEmpty(Id))
-            Attributes["id"] = Id;
-        else
-            Attributes.Remove("id");
+        ElementAttributes = [];
         
-        if (Rows > 1)
-            Attributes["rows"] = Rows;
-        else
-            Attributes.Remove("rows");
+        if (!string.IsNullOrEmpty(Id))
+            ElementAttributes["id"] = Id;
+        
+        if (Rows is {} rows)
+            ElementAttributes["rows"] = rows;
         
         if (ReadOnly)
-            Attributes["readonly"] = "readonly";
-        else
-            Attributes.Remove("readonly");
+            ElementAttributes["readonly"] = "readonly";
         
-        Attributes["class"] =
+        if (Disabled)
+            ElementAttributes["disabled"] = "disabled";
+        
+        ElementAttributes["class"] =
             string.Join(
                 " ",
                 classes);
+
+        if (Attributes is { } attributes)
+        {
+            foreach (var attribute in attributes)
+            {
+                ElementAttributes[attribute.Key] =
+                    attribute.Value;
+            }
+        }
     }
 
     private async Task HandleInputAsync(

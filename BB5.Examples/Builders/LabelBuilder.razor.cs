@@ -1,8 +1,8 @@
 ﻿using BB5.Models;
 
-namespace BB5.Examples.Components;
+namespace BB5.Examples.Builders;
 
-public partial class InputTextBuilder
+public partial class LabelBuilder
 {
     private object? EditProperties { get; set; }
 
@@ -15,7 +15,10 @@ public partial class InputTextBuilder
         base.OnInitialized();
 
         EditProperties =
-            new InputTextProperties();
+            new LabelProperties
+            {
+                Content = "Label"
+            };
 
         Properties = EditProperties;
     }

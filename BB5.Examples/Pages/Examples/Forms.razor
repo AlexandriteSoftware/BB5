@@ -5,7 +5,7 @@
 
 @layout ArticleLayout
 
-<h2 class="display-5 mt-5">
+<h2 class="display-5">
     Forms
 </h2>
 
@@ -13,12 +13,34 @@
 
 <h3>Form controls</h3>
 
-<FormControls />
+<FormControlsExample />
 
 <h3>Sizing</h3>
 
-<FormControlSizing />
+<FormControlsSizing />
 
-<h3>Form text</h3>
+<h3 class="mt-3">Form text</h3>
 
-<FormControlText />
+<h4 class="mt-3">Default layout</h4>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <FormControlsText />
+    </div>
+</div>
+
+<h4 class="mt-3">Horizontal layout</h4>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <FormControlsTextHorizontal />
+    </div>
+</div>
+
+<h3 class="mt-3">Disabled</h3>
+
+<FormControlsDisabled />
+
+<h3 class="mt-3">Readonly</h3>
+
+<FormControlsReadOnly />
