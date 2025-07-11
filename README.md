@@ -80,6 +80,15 @@ Check out the samples folder to get started fast.
 
 BB5 is under active development. Contributions, feedback, and ideas are welcome.
 
+## 🚀 Installation
+
+To get started with BB5, add the [BB5 NuGet package](https://www.nuget.org/packages/BB5) to
+your Blazor project:
+
+```pwsh
+dotnet add package BB5
+```
+
 ## 📄 Licensing
 
 BB5 is a commercial product with the following licensing terms:
